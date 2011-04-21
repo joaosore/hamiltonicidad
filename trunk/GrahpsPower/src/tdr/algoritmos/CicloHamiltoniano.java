@@ -11,6 +11,21 @@ package tdr.algoritmos;
  * tiene ciclos hamiltonianos
  */
 public class CicloHamiltoniano {
+      public static boolean comprobarAristas(boolean mAdy[][], int n){
+        int numAristas=0;
+        for(int i=0;i<n;i++){
+            for (int j = 0; j < n; j++) {
+                if(mAdy[i][j]){
+                    numAristas++;
+                }
+            }
+        }
+        numAristas=numAristas/2;
+        if(numAristas>=1/2*(n-1)*(n-2)+2){
+            return true;
+        }else
+            return false;
+    }
 /**
  * Este metodo permite aplicar la condicion suficiente:
  * Mayor de tres vertices, con grado de cada vertice >= n/2
