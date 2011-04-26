@@ -78,13 +78,14 @@ public class CicloHamiltoniano {
      */
     static public boolean esHamiltoniano(boolean vertice[], int vertActual, int conteoVertices) {
         int proxVertice;
+       // visitados.addVertice(vertActual);
         if (hayCiclo(vertActual)) {
             return true;
         }
-        visitados.addVertice(vertActual);
+
         proxVertice = escogerVertice(vertActual, vertice);
         while (proxVertice != -1) {
-           // visitados.addVertice(proxVertice);
+            visitados.addVertice(proxVertice);
             esHamiltoniano(mAdy[proxVertice], proxVertice, conteoVertices);
             visitados.eraseVertice(proxVertice);
             proxVertice = escogerVertice(vertActual, vertice);
