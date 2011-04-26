@@ -11,8 +11,18 @@ package tdr.algoritmos;
  * tiene ciclos hamiltonianos
  */
 public class CicloHamiltoniano {
+    /*Condiciones suficientes para que el grafo sea hamiltoniano*/
+    /**
+     *
+     * @param mAdy
+     * @param n
+     * @return
+     */
       public static boolean comprobarAristas(boolean mAdy[][], int n){
         int numAristas=0;
+        if (n < 3) {
+            return false;
+        }
         for(int i=0;i<n;i++){
             for (int j = 0; j < n; j++) {
                 if(mAdy[i][j]){
@@ -72,5 +82,23 @@ public class CicloHamiltoniano {
         }
 
         return true;
+    }
+    /*Condiciones necesarias para que el grafo sea hamiltoniano*/
+    /**
+     * 
+     * @param mAdy
+     * @return
+     */
+    public static boolean subconjuntoMayor(boolean mAdy[][]){
+        return false;
+    }
+    /**
+     *
+     * @param mAdy
+     * @return
+     */
+    public static boolean noTieneVerticesCorte(boolean mAdy[][]){
+        
+        return false;
     }
 }
