@@ -35,24 +35,7 @@ public class GraphPanel extends JPanel
     private boolean selecting = false;
     private int letra = 1;
 
-    public static void main(String[] args) throws Exception {
-        EventQueue.invokeLater(new Runnable() {
-
-            public void run() {
-                JFrame f = new JFrame("GraphPanel");
-                f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                GraphPanel gp = new GraphPanel();
-                f.add(gp.control, BorderLayout.NORTH);
-                f.add(new JScrollPane(gp), BorderLayout.CENTER);
-                f.getRootPane().setDefaultButton(gp.control.newButton);
-                f.pack();
-                f.setVisible(true);
-
-            }
-        });
-    }
-
-    GraphPanel() {
+     GraphPanel() {
         this.setPreferredSize(new Dimension(WIDE, HIGH));
         this.control = new ControlPanel();
         this.addMouseListener(new MouseHandler());
