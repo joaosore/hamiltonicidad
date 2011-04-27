@@ -106,7 +106,7 @@ public class CicloHamiltoniano {
         proxVertice = escogerVertice(vertActual, vertice);
         System.out.println("Vertice escogido" + proxVertice);
         while (proxVertice != -1) {
-            visitados.addVertice(proxVertice);
+          //  visitados.addVertice(proxVertice);
             vertice[proxVertice] = false;
             esHamiltoniano(mAdy[proxVertice], proxVertice, conteoVertices++);
             System.out.println("conteo vertices = " + conteoVertices);
@@ -202,11 +202,11 @@ public class CicloHamiltoniano {
         System.out.println(i + "-");
         }
         System.out.println("count =" + v.getCount());*/
-        boolean[][] mAdyEjem = {{true, true, false, true, true},
-            {true, false, true, false, false},
-            {true, false, true, false, true},
-            {true, false, false, true, false},
-            {true, true, true, true, false}};
+        boolean[][] mAdyEjem = {{false, true, false, true, true},
+            {true, false, true, true, false},
+            {false, true, false, true, true},
+            {true, true, true, false, false},
+            {true, false, true, false, false}};
         System.out.println("MATRIZ ADY");
         for (boolean[] bs : mAdyEjem) {
             for (boolean b : bs) {
