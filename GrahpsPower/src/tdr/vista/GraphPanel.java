@@ -20,8 +20,8 @@ import javax.swing.event.*;
 public class GraphPanel extends JPanel
         implements ActionListener, ChangeListener {
 
-    private static final int WIDE = 640;
-    private static final int HIGH = 640;
+    private static final int WIDE = 580;
+    private static final int HIGH = 480;
     private static final int RADIUS = 15;
     protected ControlPanel control;
     private int radius = RADIUS;
