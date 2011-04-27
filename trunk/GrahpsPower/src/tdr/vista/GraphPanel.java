@@ -112,8 +112,8 @@ public class GraphPanel extends JPanel
             boolean res = tdr.algoritmos.CicloHamiltoniano.comprobarConexidad(getGrafoMatrizAdy());
 
 
-            int[] camino = {2, 3, 5, 4, 1, 6};
-            JOptionPane.showMessageDialog(this, new GraphPanel(camino, this));
+           // int[] camino = {2, 3, 5, 4, 1, 6};
+            //JOptionPane.showMessageDialog(this, new GraphPanel(camino, this));
 
             JOptionPane.showMessageDialog(this, (res ? "El grafo es conexo" : "El grafo no es conexo"));
         } else if ("Kind".equals((cmd))) {
