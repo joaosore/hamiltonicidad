@@ -35,11 +35,34 @@ public class GraphPanel extends JPanel
     private boolean selecting = false;
     private int letra = 1;
 
-     GraphPanel() {
+    GraphPanel() {
         this.setPreferredSize(new Dimension(WIDE, HIGH));
         this.control = new ControlPanel();
         this.addMouseListener(new MouseHandler());
         this.addMouseMotionListener(new MouseMotionHandler());
+    }
+/**
+ * Constructor para mostrar el ciclo hamiltoniano encontrado
+ * @param camino Vertor con la trayectoria de los vertices
+ * @param gp GraphPanel con el que se construyo el grafo
+ */
+    GraphPanel(int[] camino, GraphPanel gp) {
+        this.addMouseListener(new MouseHandler());
+        this.addMouseMotionListener(new MouseMotionHandler());
+        this.setPreferredSize(new Dimension(WIDE, HIGH));
+        this.nodes = gp.nodes;
+        for (int i = 0; i < camino.length; i++) {
+            if (i < camino.length - 1) {
+                Node n1 = nodes.get(camino[i] - 1);
+                Node n2 = nodes.get(camino[i + 1] - 1);
+                edges.add(new Edge(n1, n2));
+            } else if (i == camino.length - 1) {
+                Node n1 = nodes.get(camino[i] - 1);
+                Node n2 = nodes.get(camino[0] - 1);
+                edges.add(new Edge(n1, n2));
+            }
+        }
+        this.repaint();
     }
 
     @Override
@@ -65,6 +88,7 @@ public class GraphPanel extends JPanel
         if ("Clear".equals(cmd)) {
             nodes.clear();
             edges.clear();
+            letra = 1;
         } else if ("Color".equals(cmd)) {
             color = JColorChooser.showDialog(
                     this, "Choose a color", color);
@@ -86,6 +110,11 @@ public class GraphPanel extends JPanel
             deleteSelected();
         } else if ("Comprobar Hamiltonicidad".equals(cmd)) {
             boolean res = tdr.algoritmos.CicloHamiltoniano.comprobarConexidad(getGrafoMatrizAdy());
+
+
+            int[] camino = {2, 3, 5, 4, 1, 6};
+            JOptionPane.showMessageDialog(this, new GraphPanel(camino, this));
+
             JOptionPane.showMessageDialog(this, (res ? "El grafo es conexo" : "El grafo no es conexo"));
         } else if ("Kind".equals((cmd))) {
             kind = (Kind) kindBox.getSelectedItem();
@@ -93,7 +122,7 @@ public class GraphPanel extends JPanel
         } else if ("New".equals(cmd)) {
             Node.selectNone(nodes);
             Point p = mousePt.getLocation();
-            Node n = new Node(p, radius, color, kind, String.valueOf(letra++));
+            Node n = new Node(p, radius, color, kind, "V" + String.valueOf(letra++));
             n.setSelected(true);
             nodes.add(n);
         } else if ("ListaConexiones".equals(cmd)) {
@@ -103,18 +132,18 @@ public class GraphPanel extends JPanel
             }
             System.out.println("");*/
             String nroVertices = JOptionPane.showInputDialog("Cantidad de vertices del grafo");
-            boolean[][] mAdy = (nroVertices != null)
+            boolean[][] mAdy = (nroVertices != null /*   System.out.println("");
+                    for (boolean[] bs : mAdy) {
+                    for (boolean b : bs) {
+                    System.out.print(b ? 1 : 0);
+                    }
+                    System.out.println("");
+                    }*/)
                     ? generarMatrizAdyAleatoria(Integer.parseInt(nroVertices)) : getGrafoMatrizAdy();
             if (mAdy == null) {
                 return;
             }
-            /*   System.out.println("");
-            for (boolean[] bs : mAdy) {
-            for (boolean b : bs) {
-            System.out.print(b ? 1 : 0);
-            }
-            System.out.println("");
-            }*/
+
             guardarGrafo(mAdy);
 
         } else {
@@ -134,8 +163,17 @@ public class GraphPanel extends JPanel
             if (n.isSelected()) {
                 deleteEdges(n);
                 iter.remove();
+                letra--;
+                ListIterator<Node> it = nodes.listIterator();
+                int num = 1;
+                while (it.hasNext()) {
+                    Node node = it.next();
+                    node.etiqueta = "V" + String.valueOf(num);
+                    num++;
+                }
             }
         }
+        this.repaint();
     }
 
     private void deleteEdges(Node n) {

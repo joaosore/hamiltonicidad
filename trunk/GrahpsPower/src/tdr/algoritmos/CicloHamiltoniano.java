@@ -6,7 +6,8 @@ package tdr.algoritmos;
 
 /**
  *
- * @author Lis
+ * @author Alejandro Perez,
+ * @author Sebastian Ramirez
  * Clase con metodos de acceso estaticos publicos para comprobar si un grafo
  * tiene ciclos hamiltonianos
  */
@@ -63,10 +64,28 @@ public class CicloHamiltoniano {
         return true;
     }
 
+    /**
+     * Comprueba si un grafo es hamiltonino o no,
+     * invoca al metodo esHamiltoniano
+     * @param verticeInicio Vertice desde el cul se quiere arrancar
+     * @param mAdy Matriz que representa la matriz de adyacencia del grafo
+     * @return Verdadero si existe un ciclo hamiltoniano
+     */
     static public boolean comprobarHamiltonicidad(int verticeInicio, boolean mAdy[][]) {
         CicloHamiltoniano.mAdy = mAdy;
         visitados = new Visitados(mAdy.length);
-        return esHamiltoniano(mAdy[verticeInicio], verticeInicio, 1);
+        boolean esH = false;
+        for (int i = 0; i < mAdy.length; i++) {
+            visitados = new Visitados(mAdy.length);
+            //boolean[] bs = mAdy[i];
+            esH = esHamiltoniano(mAdy[i], i, 1);
+            if (esH) {
+                return true;
+            }
+
+        }
+
+        return esH;
     }
 
     /**
@@ -74,19 +93,23 @@ public class CicloHamiltoniano {
      * de hamilton
      * @param mAdy Matriz booleana que representa el grafo en forma de
      * matriz de adyacencia
+     * @param conteoVertices Indica en que numero va el conteo de vertices
      * @return Verdadero si el grafo tiene un ciclo de hamilton
      */
     static public boolean esHamiltoniano(boolean vertice[], int vertActual, int conteoVertices) {
         int proxVertice;
-       // visitados.addVertice(vertActual);
+        visitados.addVertice(vertActual);
         if (hayCiclo(vertActual)) {
             return true;
         }
 
         proxVertice = escogerVertice(vertActual, vertice);
+        System.out.println("Vertice escogido" + proxVertice);
         while (proxVertice != -1) {
             visitados.addVertice(proxVertice);
-            esHamiltoniano(mAdy[proxVertice], proxVertice, conteoVertices);
+            vertice[proxVertice] = false;
+            esHamiltoniano(mAdy[proxVertice], proxVertice, conteoVertices++);
+            System.out.println("conteo vertices = " + conteoVertices);
             visitados.eraseVertice(proxVertice);
             proxVertice = escogerVertice(vertActual, vertice);
         }
@@ -184,6 +207,13 @@ public class CicloHamiltoniano {
             {true, false, true, false, true},
             {true, false, false, true, false},
             {true, true, true, true, false}};
+        System.out.println("MATRIZ ADY");
+        for (boolean[] bs : mAdyEjem) {
+            for (boolean b : bs) {
+                System.out.print(b ? 1 : 0);
+            }
+            System.out.println("");
+        }
         System.out.println("conexo=" + comprobarConexidad(mAdyEjem));
         System.out.println("Hamiltoniano =" + comprobarHamiltonicidad(0, mAdyEjem));
 
