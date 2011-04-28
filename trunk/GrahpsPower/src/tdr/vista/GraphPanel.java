@@ -42,11 +42,12 @@ public class GraphPanel extends JPanel
         this.addMouseListener(new MouseHandler());
         this.addMouseMotionListener(new MouseMotionHandler());
     }
-/**
- * Constructor para mostrar el ciclo hamiltoniano encontrado
- * @param camino Vertor con la trayectoria de los vertices
- * @param gp GraphPanel con el que se construyo el grafo
- */
+
+    /**
+     * Constructor para mostrar el ciclo hamiltoniano encontrado
+     * @param camino Vertor con la trayectoria de los vertices
+     * @param gp GraphPanel con el que se construyo el grafo
+     */
     GraphPanel(short[] camino, GraphPanel gp) {
         this.addMouseListener(new MouseHandler());
         this.addMouseMotionListener(new MouseMotionHandler());
@@ -55,18 +56,18 @@ public class GraphPanel extends JPanel
         for (int i = 0; i < camino.length; i++) {
             if (i < camino.length - 1) {
 
-                Node n1 = nodes.get(camino[i] );
-                if(i==0){
+                Node n1 = nodes.get(camino[i]);
+                if (i == 0) {
                     boolean aux = n1.isSelected();
                     n1.setSelected(true);
                     n1.updateColor(nodes, Color.black);
                     n1.setSelected(aux);
                 }
-                Node n2 = nodes.get(camino[i + 1] );
+                Node n2 = nodes.get(camino[i + 1]);
                 edges.add(new Edge(n1, n2));
             } else if (i == camino.length - 1) {
-                Node n1 = nodes.get(camino[i] );
-                Node n2 = nodes.get(camino[0] );
+                Node n1 = nodes.get(camino[i]);
+                Node n2 = nodes.get(camino[0]);
                 edges.add(new Edge(n1, n2));
             }
         }
@@ -117,11 +118,14 @@ public class GraphPanel extends JPanel
         } else if ("Delete".equals(cmd)) {
             deleteSelected();
         } else if ("Comprobar Hamiltonicidad".equals(cmd)) {
+            long timeIni = System.currentTimeMillis();
             boolean res = tdr.algoritmos.Hamiltonicidad.isHamiltoniano(getGrafoMatrizAdy());
-            JOptionPane.showMessageDialog(null, (res?new GraphPanel(Hamiltonicidad.getVisitados(), this):"El Grafo no es Hamiltoniano"));
+            long timeFin = System.currentTimeMillis();
+            JOptionPane.showMessageDialog(null, (res ? new GraphPanel(Hamiltonicidad.getVisitados(), this) : "El Grafo no es Hamiltoniano"));
+            JOptionPane.showMessageDialog(null,"Tiempo de Ejecucion "+((timeFin-timeIni)/1000.0f)+"Segundos");
 
 
-           // int[] camino = {2, 3, 5, 4, 1, 6};
+            // int[] camino = {2, 3, 5, 4, 1, 6};
             //JOptionPane.showMessageDialog(this, new GraphPanel(camino, this));
 
             JOptionPane.showMessageDialog(this, (res ? "El grafo es conexo" : "El grafo no es conexo"));
