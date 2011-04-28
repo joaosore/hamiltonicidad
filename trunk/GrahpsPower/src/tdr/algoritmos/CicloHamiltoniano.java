@@ -22,14 +22,17 @@ public class CicloHamiltoniano {
     private static boolean mAdy[][];
     private static Visitados visitados;
     private static CicloHamiltoniano ch;
-    private CicloHamiltoniano(){
+
+    private CicloHamiltoniano() {
     }
-    private static  CicloHamiltoniano getCicloHamiltoniano(){
-        if (ch==null) {
-            ch=new CicloHamiltoniano();
+
+    private static CicloHamiltoniano getCicloHamiltoniano() {
+        if (ch == null) {
+            ch = new CicloHamiltoniano();
         }
         return ch;
     }
+
     public static boolean comprobarPorGrado(boolean mAdy[][]) {
         int gradoVertice, minGrado = mAdy.length / 2;
         if (mAdy.length < 3) {
@@ -86,7 +89,8 @@ public class CicloHamiltoniano {
         for (int i = 0; i < mAdy.length; i++) {
             //visitados = new Visitados(mAdy.length);
             //boolean[] bs = mAdy[i];
-            esH = esHamiltoniano(mAdy[i], i, 1);
+            // esH = esHamiltoniano(mAdy[i], i, 1);
+            esH = esHamiltoniano(i, mAdy[i], 0);
             if (esH) {
                 return true;
             }
@@ -104,26 +108,50 @@ public class CicloHamiltoniano {
      * @param conteoVertices Indica en que numero va el conteo de vertices
      * @return Verdadero si el grafo tiene un ciclo de hamilton
      */
-    static public boolean esHamiltoniano(boolean vertice[], int vertActual, int conteoVertices) {
+    /* static public boolean esHamiltoniano__(boolean vertice[], int vertActual, int conteoVertices) {
+    int proxVertice;
+    boolean aux[] = new boolean[mAdy.length];
+    System.arraycopy(vertice, 0, aux, 0, aux.length);
+    visitados.addVertice(vertActual);
+    if (hayCiclo(vertActual)) {
+    return true;
+    }
+
+    proxVertice = escogerVertice(vertActual, vertice);
+    System.out.println("Vertice escogido" + proxVertice);
+    while (proxVertice != -1) {
+    //  visitados.addVertice(proxVertice);
+    aux[proxVertice] = false;
+    esHamiltoniano__(mAdy[proxVertice], proxVertice, conteoVertices++);
+    System.out.println("conteo vertices = " + conteoVertices);
+    visitados.eraseVertice(proxVertice);
+    proxVertice = escogerVertice(vertActual, vertice);
+    }
+    return false;
+    }
+     */
+    static public boolean esHamiltoniano(int vertActual, boolean vertice[], int conteoVertices) {
         int proxVertice;
-        boolean aux[]=new boolean[mAdy.length];
-        System.arraycopy(vertice, 0, aux, 0, aux.length);
-        visitados.addVertice(vertActual);
+        if (conteoVertices == 0) {
+            visitados.addVertice(vertActual);
+        }
         if (hayCiclo(vertActual)) {
             return true;
         }
-
-        proxVertice = escogerVertice(vertActual, vertice);
-        System.out.println("Vertice escogido" + proxVertice);
+        //  visitados.addVertice(vertActual);
+        proxVertice = escogerVertice(vertice);
+        boolean res = false;
         while (proxVertice != -1) {
-          //  visitados.addVertice(proxVertice);
-            aux[proxVertice] = false;
-            esHamiltoniano(mAdy[proxVertice], proxVertice, conteoVertices++);
-            System.out.println("conteo vertices = " + conteoVertices);
-                visitados.eraseVertice(proxVertice);
-                proxVertice = escogerVertice(vertActual, vertice);
+            visitados.addVertice(proxVertice);
+            res = esHamiltoniano(proxVertice, mAdy[proxVertice], ++conteoVertices);
+            //if(!res){
+            visitados.eraseVertice(proxVertice);
+            proxVertice = escogerVertice(vertice);
+            // }else
+            //   break;
         }
-        return false;
+
+        return res;
     }
 
     static public boolean esHamiltonianoXXX(boolean mAdy[][]) {
@@ -137,25 +165,33 @@ public class CicloHamiltoniano {
 
         return false;
     }
-/**
- *
- * @param verActual
- * @return
- */
+
+    /**
+     *
+     * @param verActual
+     * @return
+     */
     static private boolean hayCiclo(int verActual) {
         return visitados.isCicloCompleto(verActual);
     }
 
-/**
- *
- * @param verticeActual
- * @param ady
- * @return
- */
-    private static int escogerVertice(int verticeActual, boolean[] ady) {
+    /**
+     *
+     * @param verticeActual
+     * @param ady
+     * @return
+     */
+    private static int escogerVertice(boolean[] ady) {
         for (int i = 0; i < ady.length; i++) {
+            /* if (ady[i]) {
+            if (!visitados.isVisitado(i) && ady[i]/*!visitados.yaEscogido(verticeActual,i)*//*) {
+            //visitados.escoger(verticeActual, i);
+            /* return i;
+            }
+            }*/
+
             if (ady[i]) {
-                if (!visitados.isVisitado(i) && ady[i]/*!visitados.yaEscogido(verticeActual,i)*/) {
+                if (!visitados.isVisitado(i)/*!visitados.yaEscogido(verticeActual,i)*/) {
                     //visitados.escoger(verticeActual, i);
                     return i;
                 }
@@ -168,9 +204,10 @@ public class CicloHamiltoniano {
     private boolean hayVertices(int nroVertices, int conteo) {
         return (nroVertices == conteo);
     }
-/**
- *
- */
+
+    /**
+     *
+     */
     static class Visitados {
 
         private boolean[] visitados;
@@ -178,13 +215,20 @@ public class CicloHamiltoniano {
         private int[] camino;
         private int count;
         private boolean escogidos[][];
+
         public Visitados(int nroVertices) {
             visitados = new boolean[nroVertices];
             this.nroVertices = nroVertices;
             count = -1;//se coloca en -1 para evitar doble utilizacion de variable
             camino = new int[nroVertices];
-            escogidos=new boolean[nroVertices][nroVertices];
+            escogidos = new boolean[nroVertices][nroVertices];
+            for (int i = 0; i < visitados.length; i++) {
+                //boolean b = visitados[i];
+                camino[i]=0;
+
+            }
         }
+
         /**
          *
          * @param vertice
@@ -193,6 +237,7 @@ public class CicloHamiltoniano {
             visitados[vertice] = true;
             camino[++count] = vertice;
         }
+
         /**
          *
          * @return
@@ -200,6 +245,7 @@ public class CicloHamiltoniano {
         public int[] getCamino() {
             return camino;
         }
+
         /**
          *
          * @param vertice
@@ -208,6 +254,7 @@ public class CicloHamiltoniano {
             visitados[vertice] = false;
             count--;//Se borra el vertice del camino
         }
+
         /**
          *
          * @param vertice
@@ -216,6 +263,7 @@ public class CicloHamiltoniano {
         public boolean isVisitado(int vertice) {
             return visitados[vertice];
         }
+
         /**
          *
          * @return
@@ -224,19 +272,25 @@ public class CicloHamiltoniano {
             return count;
         }
 
-        public void escoger(int verticeActual, int verticeEscogido){
-            escogidos[verticeActual][verticeEscogido]=true;
+        public void escoger(int verticeActual, int verticeEscogido) {
+            escogidos[verticeActual][verticeEscogido] = true;
         }
 
-        public boolean yaEscogido(int verticeActual, int verticeEscogido){
+        public boolean yaEscogido(int verticeActual, int verticeEscogido) {
             return escogidos[verticeActual][verticeEscogido];
         }
+
         /**
          * Indica si el ciclo esta completado(Cuando todos los vertices se incluyen en el arreglo)
          * @return Verdadero si se ha completado el ciclo
          */
         public boolean isCicloCompleto(int verticeInicio) {
-            return (count == nroVertices && verticeInicio == camino[0]);
+            // return (count == nroVertices && verticeInicio == camino[0]);
+            return (count == nroVertices && buscarVerticeAdy(verticeInicio, camino[0]));
+        }
+
+        public boolean buscarVerticeAdy(int verticeOrigen, int verticeDestino) {
+            return mAdy[verticeOrigen][verticeDestino];
         }
     }
 
@@ -255,15 +309,21 @@ public class CicloHamiltoniano {
             {true, true, true, false, false},
             {true, false, true, false, false}};
         System.out.println("MATRIZ ADY");
-        for (boolean[] bs : mAdyEjem) {
-            for (boolean b : bs) {
-                System.out.print(b ? 1 : 0);
-            }
-            System.out.println("");
+        /*for (boolean[] bs : mAdyEjem) {
+        for (boolean b : bs) {
+        System.out.print(b ? 1 : 0);
         }
-        System.out.println("conexo=" + comprobarConexidad(mAdyEjem));
+        System.out.println("");
+        }
+        System.out.println("conexo=" + comprobarConexidad(mAdyEjem));*/
         System.out.println("Hamiltoniano =" + comprobarHamiltonicidad(0, mAdyEjem));
 
 
     }
+
+
+
+
+
+
 }
