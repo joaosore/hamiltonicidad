@@ -15,6 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.event.*;
+import tdr.algoritmos.Hamiltonicidad;
 
 /** @author John B. Matthews; distribution per GPL. */
 public class GraphPanel extends JPanel
@@ -46,19 +47,26 @@ public class GraphPanel extends JPanel
  * @param camino Vertor con la trayectoria de los vertices
  * @param gp GraphPanel con el que se construyo el grafo
  */
-    GraphPanel(int[] camino, GraphPanel gp) {
+    GraphPanel(short[] camino, GraphPanel gp) {
         this.addMouseListener(new MouseHandler());
         this.addMouseMotionListener(new MouseMotionHandler());
         this.setPreferredSize(new Dimension(WIDE, HIGH));
         this.nodes = gp.nodes;
         for (int i = 0; i < camino.length; i++) {
             if (i < camino.length - 1) {
-                Node n1 = nodes.get(camino[i] - 1);
-                Node n2 = nodes.get(camino[i + 1] - 1);
+
+                Node n1 = nodes.get(camino[i] );
+                if(i==0){
+                    boolean aux = n1.isSelected();
+                    n1.setSelected(true);
+                    n1.updateColor(nodes, Color.black);
+                    n1.setSelected(aux);
+                }
+                Node n2 = nodes.get(camino[i + 1] );
                 edges.add(new Edge(n1, n2));
             } else if (i == camino.length - 1) {
-                Node n1 = nodes.get(camino[i] - 1);
-                Node n2 = nodes.get(camino[0] - 1);
+                Node n1 = nodes.get(camino[i] );
+                Node n2 = nodes.get(camino[0] );
                 edges.add(new Edge(n1, n2));
             }
         }
@@ -109,7 +117,8 @@ public class GraphPanel extends JPanel
         } else if ("Delete".equals(cmd)) {
             deleteSelected();
         } else if ("Comprobar Hamiltonicidad".equals(cmd)) {
-            boolean res = tdr.algoritmos.CicloHamiltoniano.comprobarConexidad(getGrafoMatrizAdy());
+            boolean res = tdr.algoritmos.Hamiltonicidad.isHamiltoniano(getGrafoMatrizAdy());
+            JOptionPane.showMessageDialog(null, (res?new GraphPanel(Hamiltonicidad.getVisitados(), this):"El Grafo no es Hamiltoniano"));
 
 
            // int[] camino = {2, 3, 5, 4, 1, 6};
