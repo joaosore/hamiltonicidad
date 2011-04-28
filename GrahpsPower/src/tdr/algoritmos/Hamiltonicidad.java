@@ -34,12 +34,12 @@ public class Hamiltonicidad {
             }
             conteo = -1;
             //iterar sobre los vertices hasta encontrar una solucion
-            copiaMAdy = mAdy.clone();
+            //copiaMAdy = mAdy.clone();
             agregarVertice(i);
             boolean isHMT = comprobarCicloHamiltoniano(i, mAdy[i]);//Si encontro un ciclo retornar verdadero
-            System.out.println("Terminado ciclo " + i + "Tiene Camino==> "+isHMT);
+            System.out.println("Terminado ciclo " + i + "Tiene Camino==> " + isHMT);
             if (isHMT) {
-                //return true;
+                return true;
             }
 
         }
@@ -54,30 +54,29 @@ public class Hamiltonicidad {
     private static boolean comprobarCicloHamiltoniano(short verticeActual, boolean[] vertice) {
         System.out.println("Vertice actual = " + verticeActual);
         short sigVertice = -1;
-        boolean sigVerticeArray[];
+        boolean aux[]=new boolean[vertice.length];
         if (isCiclo()) {
-            System.out.println("TIENE CICLO HAMILTONIANO "+ (visitados[0]+1));
+            System.out.println("TIENE CICLO HAMILTONIANO " + (visitados[0] + 1));
             return true;
         }
-        sigVertice = escogerVertice(vertice);
-        
+        System.arraycopy(vertice, 0, aux, 0, aux.length);
+        sigVertice = escogerVertice(aux);
         System.out.println("Vertice escogido = " + sigVertice);
         while (sigVertice != -1) {
-            sigVerticeArray = mAdy[sigVertice].clone();
             agregarVertice(sigVertice);
-            vertice[sigVertice] = false;
-            System.out.print("Camino => [ ");
+            aux[sigVertice] = false;
+            /*System.out.print("Camino => [ ");
             for (int i = 0; i < visitados.length; i++) {
                 System.out.print(visitados[i] + 1 + " * ");
             }
             System.out.println(" ]");
             System.out.println("Conteo => " + conteo);
-
-            if (comprobarCicloHamiltoniano(sigVertice, sigVerticeArray) ){
+*/
+            if (comprobarCicloHamiltoniano(sigVertice, mAdy[sigVertice])) {
                 return true;
             }
             borrarVertice();
-            sigVertice = escogerVertice(vertice);
+            sigVertice = escogerVertice(aux);
         }
 
 
@@ -152,8 +151,14 @@ public class Hamiltonicidad {
      * Borrado logico de un vertice, ya que conteo es el indice del vertor de visitados
      */
     private static void borrarVertice() {
-        conteo--;
+        visitados[conteo--]=-1;
     }
+
+    public static short[] getVisitados() {
+        return visitados;
+    }
+
+
 
     static public void main(String args[]) {
 
@@ -171,6 +176,7 @@ public class Hamiltonicidad {
         }
 
         System.out.println("Hamiltoniano =" + isHamiltoniano(mAdyEjem));
+
 
 
 
