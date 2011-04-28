@@ -21,7 +21,15 @@ public class CicloHamiltoniano {
      */
     private static boolean mAdy[][];
     private static Visitados visitados;
-
+    private static CicloHamiltoniano ch;
+    private CicloHamiltoniano(){
+    }
+    private static  CicloHamiltoniano getCicloHamiltoniano(){
+        if (ch==null) {
+            ch=new CicloHamiltoniano();
+        }
+        return ch;
+    }
     public static boolean comprobarPorGrado(boolean mAdy[][]) {
         int gradoVertice, minGrado = mAdy.length / 2;
         if (mAdy.length < 3) {
@@ -76,7 +84,7 @@ public class CicloHamiltoniano {
         visitados = new Visitados(mAdy.length);
         boolean esH = false;
         for (int i = 0; i < mAdy.length; i++) {
-            visitados = new Visitados(mAdy.length);
+            //visitados = new Visitados(mAdy.length);
             //boolean[] bs = mAdy[i];
             esH = esHamiltoniano(mAdy[i], i, 1);
             if (esH) {
@@ -98,6 +106,8 @@ public class CicloHamiltoniano {
      */
     static public boolean esHamiltoniano(boolean vertice[], int vertActual, int conteoVertices) {
         int proxVertice;
+        boolean aux[]=new boolean[mAdy.length];
+        System.arraycopy(vertice, 0, aux, 0, aux.length);
         visitados.addVertice(vertActual);
         if (hayCiclo(vertActual)) {
             return true;
@@ -107,11 +117,11 @@ public class CicloHamiltoniano {
         System.out.println("Vertice escogido" + proxVertice);
         while (proxVertice != -1) {
           //  visitados.addVertice(proxVertice);
-            vertice[proxVertice] = false;
+            aux[proxVertice] = false;
             esHamiltoniano(mAdy[proxVertice], proxVertice, conteoVertices++);
             System.out.println("conteo vertices = " + conteoVertices);
-            visitados.eraseVertice(proxVertice);
-            proxVertice = escogerVertice(vertActual, vertice);
+                visitados.eraseVertice(proxVertice);
+                proxVertice = escogerVertice(vertActual, vertice);
         }
         return false;
     }
@@ -127,15 +137,26 @@ public class CicloHamiltoniano {
 
         return false;
     }
-
+/**
+ *
+ * @param verActual
+ * @return
+ */
     static private boolean hayCiclo(int verActual) {
         return visitados.isCicloCompleto(verActual);
     }
 
+/**
+ *
+ * @param verticeActual
+ * @param ady
+ * @return
+ */
     private static int escogerVertice(int verticeActual, boolean[] ady) {
         for (int i = 0; i < ady.length; i++) {
             if (ady[i]) {
-                if (!visitados.isVisitado(i)) {
+                if (!visitados.isVisitado(i) && ady[i]/*!visitados.yaEscogido(verticeActual,i)*/) {
+                    //visitados.escoger(verticeActual, i);
                     return i;
                 }
             }
@@ -147,43 +168,69 @@ public class CicloHamiltoniano {
     private boolean hayVertices(int nroVertices, int conteo) {
         return (nroVertices == conteo);
     }
-
+/**
+ *
+ */
     static class Visitados {
 
         private boolean[] visitados;
         private int nroVertices;
         private int[] camino;
         private int count;
-
+        private boolean escogidos[][];
         public Visitados(int nroVertices) {
             visitados = new boolean[nroVertices];
             this.nroVertices = nroVertices;
             count = -1;//se coloca en -1 para evitar doble utilizacion de variable
             camino = new int[nroVertices];
+            escogidos=new boolean[nroVertices][nroVertices];
         }
-
+        /**
+         *
+         * @param vertice
+         */
         public void addVertice(int vertice) {
             visitados[vertice] = true;
             camino[++count] = vertice;
         }
-
+        /**
+         *
+         * @return
+         */
         public int[] getCamino() {
             return camino;
         }
-
+        /**
+         *
+         * @param vertice
+         */
         public void eraseVertice(int vertice) {
             visitados[vertice] = false;
             count--;//Se borra el vertice del camino
         }
-
+        /**
+         *
+         * @param vertice
+         * @return
+         */
         public boolean isVisitado(int vertice) {
             return visitados[vertice];
         }
-
+        /**
+         *
+         * @return
+         */
         public int getCount() {
             return count;
         }
 
+        public void escoger(int verticeActual, int verticeEscogido){
+            escogidos[verticeActual][verticeEscogido]=true;
+        }
+
+        public boolean yaEscogido(int verticeActual, int verticeEscogido){
+            return escogidos[verticeActual][verticeEscogido];
+        }
         /**
          * Indica si el ciclo esta completado(Cuando todos los vertices se incluyen en el arreglo)
          * @return Verdadero si se ha completado el ciclo
