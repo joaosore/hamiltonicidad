@@ -1,14 +1,12 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package tdr.algoritmos;
 
 import tdr.vista.GraphPanel;
 
 /**
  *
- * @author @lejo
+ * @author Alejandro Perez
+ * @author Sebastian Ramirez
  */
 public class Hamiltonicidad {
 
@@ -25,9 +23,9 @@ public class Hamiltonicidad {
      * @return Verdadero si el grafo es hamiltoniano (Posee un ciclo de hamilton)
      */
     public static boolean isHamiltoniano(boolean mAdy[][]) {
-      // if (mAdy.length < 3) {
-        //    return false;
-        //}
+         if (mAdy.length < 3) {
+            return false;
+        }
         Hamiltonicidad.mAdy = mAdy;
         nroVertices = Short.valueOf(String.valueOf(mAdy.length));
         visitados = new short[nroVertices];
@@ -77,7 +75,7 @@ public class Hamiltonicidad {
             borrarVertice();//Si llegamos aca es porque el camino es erroneo
             //Se borra el ultimo vertice ingresado
             sigVertice = escogerVertice(aux);//Traemos el siguiente vertice
-           //candidato para tratar de allar una solucion
+            //candidato para tratar de allar una solucion
         }
 
 
@@ -94,7 +92,6 @@ public class Hamiltonicidad {
         for (short i = 0; i < nroVertices; i++) {
             if (vertice[i]) {
                 if (!isVisitado(i)) {
-                    //copiaMAdy[vertActual][i] = false;//borramos ese enlace de la matriz
                     return i;
                 }
             }
@@ -148,7 +145,7 @@ public class Hamiltonicidad {
     }
 
     /**
-     * Borrado logico de un vertice, ya que conteo es el indice del vertor de visitados
+     * Borra el ultimo vertice, ya que conteo es el indice del vector de visitados
      */
     private static void borrarVertice() {
         visitados[conteo--] = -1;
@@ -164,25 +161,10 @@ public class Hamiltonicidad {
         return visitados;
     }
 
-    
     static public void main(String args[]) {
-
-    boolean[][] mAdyEjem = {{false, true, false, true, true},
-    {true, false, true, true, false},
-    {false, true, false, true, true},
-    {true, true, true, false, false},
-    {true, false, true, false, false}};
-    System.out.println("MATRIZ ADY");
-    for (boolean[] bs : mAdyEjem) {
-    for (boolean b : bs) {
-    System.out.print(b ? 1 : 0);
-    }
-    System.out.println("");
+        System.out.println("Hamiltoniano =" + isHamiltoniano(GraphPanel.generarMatrizAdyAleatoria(100)));
     }
 
-    System.out.println("Hamiltoniano =" + isHamiltoniano(GraphPanel.generarMatrizAdyAleatoria(101)));
-
-    }
     /**
      * Imprime en consola el vector de Caminos
      */
