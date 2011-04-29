@@ -5,7 +5,8 @@
 
 /*
  * VentanaPrincipal.java
- *
+ *Clase pra el control de GraphPower, contiene toda la interfaz grafica de
+ * la aplicacion
  * Created on 23/02/2011, 03:42:04 PM
  */
 package tdr.vista;
@@ -68,10 +69,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             .addGap(0, 523, Short.MAX_VALUE)
         );
 
-        file.setText("File");
+        file.setText("Archivo");
         jMenuBar1.add(file);
 
-        edit.setText("Edit");
+        edit.setText("Edición");
         jMenuBar1.add(edit);
 
         setJMenuBar(jMenuBar1);
