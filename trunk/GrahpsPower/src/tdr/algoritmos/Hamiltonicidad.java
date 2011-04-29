@@ -1,4 +1,3 @@
-
 package tdr.algoritmos;
 
 import tdr.vista.GraphPanel;
@@ -23,30 +22,20 @@ public class Hamiltonicidad {
      * @return Verdadero si el grafo es hamiltoniano (Posee un ciclo de hamilton)
      */
     public static boolean isHamiltoniano(boolean mAdy[][]) {
-         if (mAdy.length < 3) {
+        if (mAdy.length < 3) {//Si el grafo tiene menos de 3 vertices no es hamiltoniano
             return false;
         }
         Hamiltonicidad.mAdy = mAdy;
         nroVertices = Short.valueOf(String.valueOf(mAdy.length));
-        visitados = new short[nroVertices];
-        for (short i = 0; i < mAdy.length; i++) {
-            //System.out.println("\n\n\nVertice de inicio " + i + "\n\n");
-            for (short j = 0; j < nroVertices; j++) {
-                visitados[j] = -1;
-            }
-            conteo = -1;
-            //iterar sobre los vertices hasta encontrar una solucion
-            //copiaMAdy = mAdy.clone();
-            agregarVertice(i);//Agregamos el primer vertice a el camino
-            boolean isHMT = comprobarCicloHamiltoniano(i, mAdy[i]);//Si encontro un ciclo retornar verdadero
-            //  System.out.println("Terminado ciclo " + i + "Tiene Camino==> " + isHMT);
-            if (isHMT) {//Si es hamiltoniano retornmos inmediatamente
-                return true;
-            }
-
+        visitados = new short[nroVertices];       
+        for (short j = 0; j < nroVertices; j++) {
+            visitados[j] = -1;
         }
-        return false;//Se se recorren todos los vertices y no hallamos un camino
-        //entonces retornamos falso
+        conteo = -1;
+        short verticeInicial = 0;
+        agregarVertice(verticeInicial);//Agregamos el primer vertice a el camino
+        return comprobarCicloHamiltoniano(verticeInicial, mAdy[verticeInicial]);//Si encontro un ciclo retornar verdadero
+
     }
 
     /**
@@ -75,7 +64,7 @@ public class Hamiltonicidad {
             borrarVertice();//Si llegamos aca es porque el camino es erroneo
             //Se borra el ultimo vertice ingresado
             sigVertice = escogerVertice(aux);//Traemos el siguiente vertice
-            //candidato para tratar de allar una solucion
+            //candidato para tratar de hallar una solucion
         }
 
 
