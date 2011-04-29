@@ -94,19 +94,19 @@ public class GraphPanel extends JPanel
     public void actionPerformed(ActionEvent e) {
         Color color = control.colorIcon.getColor();
         String cmd = e.getActionCommand();
-        if ("Clear".equals(cmd)) {
+        if ("Limpiar".equals(cmd)) {
             nodes.clear();
             edges.clear();
             letra = 1;
         } else if ("Color".equals(cmd)) {
             color = JColorChooser.showDialog(
-                    this, "Choose a color", color);
+                    this, "Escoger un color", color);
             if (color != null) {
                 Node.updateColor(nodes, color);
                 control.colorIcon.setColor(color);
                 control.repaint();
             }
-        } else if ("Connect".equals(cmd)) {
+        } else if ("Conectar".equals(cmd)) {
             Node.getSelected(nodes, selected);
             if (selected.size() > 1) {
                 for (int i = 0; i < selected.size() - 1; ++i) {
@@ -115,7 +115,7 @@ public class GraphPanel extends JPanel
                     edges.add(new Edge(n1, n2));
                 }
             }
-        } else if ("Delete".equals(cmd)) {
+        } else if ("Borrar".equals(cmd)) {
             deleteSelected();
         } else if ("Comprobar Hamiltonicidad".equals(cmd)) {
             long timeIni = System.currentTimeMillis();
@@ -129,10 +129,10 @@ public class GraphPanel extends JPanel
             //JOptionPane.showMessageDialog(this, new GraphPanel(camino, this));
 
             JOptionPane.showMessageDialog(this, (res ? "El grafo es conexo" : "El grafo no es conexo"));
-        } else if ("Kind".equals((cmd))) {
+        } else if ("Tipo".equals((cmd))) {
             kind = (Kind) kindBox.getSelectedItem();
             Node.updateKind(nodes, kind);
-        } else if ("New".equals(cmd)) {
+        } else if ("Nuevo".equals(cmd)) {
             Node.selectNone(nodes);
             Point p = mousePt.getLocation();
             Node n = new Node(p, radius, color, kind, "V" + String.valueOf(letra++));
@@ -266,7 +266,7 @@ public class GraphPanel extends JPanel
 
     protected class ControlPanel extends JPanel {
 
-        protected JButton newButton = new JButton("New");
+        protected JButton newButton = new JButton("Nuevo");
         private ColorIcon colorIcon = new ColorIcon(Color.blue);
         private JPopupMenu popup = new JPopupMenu();
 
@@ -275,7 +275,7 @@ public class GraphPanel extends JPanel
             this.setBackground(Color.lightGray);
             newButton.addActionListener(GraphPanel.this);
             this.add(newButton);
-            JButton clearButton = new JButton("Clear");
+            JButton clearButton = new JButton("Limpiar");
             clearButton.addActionListener(GraphPanel.this);
             this.add(clearButton);
             for (Kind k : Kind.values()) {
@@ -294,16 +294,16 @@ public class GraphPanel extends JPanel
             this.add(new JLabel("Size:"));
             this.add(js);
 
-            JMenuItem menuItem = new JMenuItem("New");
+            JMenuItem menuItem = new JMenuItem("Nuevo");
             menuItem.addActionListener(GraphPanel.this);
             popup.add(menuItem);
             menuItem = new JMenuItem("Color");
             menuItem.addActionListener(GraphPanel.this);
             popup.add(menuItem);
-            menuItem = new JMenuItem("Connect");
+            menuItem = new JMenuItem("Conectar");
             menuItem.addActionListener(GraphPanel.this);
             popup.add(menuItem);
-            menuItem = new JMenuItem("Delete");
+            menuItem = new JMenuItem("Borrar");
             menuItem.addActionListener(GraphPanel.this);
             popup.add(menuItem);
             menuItem = new JMenuItem("ListaConexiones");
@@ -313,7 +313,7 @@ public class GraphPanel extends JPanel
             menuItem.addActionListener(GraphPanel.this);
             popup.add(menuItem);
 
-            JMenu subMenu = new JMenu("Kind");
+            JMenu subMenu = new JMenu("Tipo");
             for (Kind k : Kind.values()) {
                 menuItem = new JMenuItem(k.toString());
                 menuItem.addActionListener(GraphPanel.this);
