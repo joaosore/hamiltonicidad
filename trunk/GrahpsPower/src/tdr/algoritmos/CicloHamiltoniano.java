@@ -4,6 +4,8 @@
  */
 package tdr.algoritmos;
 
+import tdr.vista.GraphPanel;
+
 /**
  *
  * @author Alejandro Perez,
@@ -316,7 +318,7 @@ public class CicloHamiltoniano {
         System.out.println("");
         }
         System.out.println("conexo=" + comprobarConexidad(mAdyEjem));*/
-        System.out.println("Hamiltoniano =" + comprobarHamiltonicidad(0, mAdyEjem));
+        System.out.println("Hamiltoniano =" + comprobarHamiltonicidad(0, GraphPanel.generarMatrizAdyAleatoria(30)));
 
 
     }

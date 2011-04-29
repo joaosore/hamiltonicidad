@@ -122,13 +122,8 @@ public class GraphPanel extends JPanel
             boolean res = tdr.algoritmos.Hamiltonicidad.isHamiltoniano(getGrafoMatrizAdy());
             long timeFin = System.currentTimeMillis();
             JOptionPane.showMessageDialog(null, (res ? new GraphPanel(Hamiltonicidad.getVisitados(), this) : "El Grafo no es Hamiltoniano"));
-            JOptionPane.showMessageDialog(null,"Tiempo de Ejecucion "+((timeFin-timeIni)/1000.0f)+"Segundos");
-
-
-            // int[] camino = {2, 3, 5, 4, 1, 6};
-            //JOptionPane.showMessageDialog(this, new GraphPanel(camino, this));
-
-            JOptionPane.showMessageDialog(this, (res ? "El grafo es conexo" : "El grafo no es conexo"));
+            JOptionPane.showMessageDialog(null,"Tiempo de Ejecucion "+((timeFin-timeIni)/1000.0000f)+" Segundos");
+           // JOptionPane.showMessageDialog(this, (res ? "El grafo es conexo" : "El grafo no es conexo"));
         } else if ("Tipo".equals((cmd))) {
             kind = (Kind) kindBox.getSelectedItem();
             Node.updateKind(nodes, kind);
@@ -587,7 +582,7 @@ public class GraphPanel extends JPanel
         return -1;
     }
 
-    public boolean[][] generarMatrizAdyAleatoria(int nroVertices) {
+    public static boolean[][] generarMatrizAdyAleatoria(int nroVertices) {
         if (nroVertices > 100) {
             return null;
         }
