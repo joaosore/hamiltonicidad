@@ -122,8 +122,8 @@ public class GraphPanel extends JPanel
             boolean res = tdr.algoritmos.Hamiltonicidad.isHamiltoniano(getGrafoMatrizAdy());
             long timeFin = System.currentTimeMillis();
             JOptionPane.showMessageDialog(null, (res ? new GraphPanel(Hamiltonicidad.getVisitados(), this) : "El Grafo no es Hamiltoniano"));
-            JOptionPane.showMessageDialog(null,"Tiempo de Ejecucion "+((timeFin-timeIni)/1000.0000f)+" Segundos");
-           // JOptionPane.showMessageDialog(this, (res ? "El grafo es conexo" : "El grafo no es conexo"));
+            JOptionPane.showMessageDialog(null, "Tiempo de Ejecucion " + ((timeFin - timeIni) / 1000.0000f) + " Segundos");
+            // JOptionPane.showMessageDialog(this, (res ? "El grafo es conexo" : "El grafo no es conexo"));
         } else if ("Tipo".equals((cmd))) {
             kind = (Kind) kindBox.getSelectedItem();
             Node.updateKind(nodes, kind);
@@ -301,9 +301,9 @@ public class GraphPanel extends JPanel
             menuItem = new JMenuItem("Borrar");
             menuItem.addActionListener(GraphPanel.this);
             popup.add(menuItem);
-            menuItem = new JMenuItem("ListaConexiones");
-            menuItem.addActionListener(GraphPanel.this);
-            popup.add(menuItem);
+            // menuItem = new JMenuItem("ListaConexiones");
+            //menuItem.addActionListener(GraphPanel.this);
+            //popup.add(menuItem);
             menuItem = new JMenuItem("Comprobar Hamiltonicidad");
             menuItem.addActionListener(GraphPanel.this);
             popup.add(menuItem);
@@ -535,9 +535,14 @@ public class GraphPanel extends JPanel
         }
     }
 
+    /**
+     * Devuelve una matriz booleana, que es la representacion del grafo
+     * en mAdy, obtenida de la interfaz grafica de usuario.
+     * @return Una matriz ady que es la equivalente al grafo ingresado a partir de la interfaz grafica
+     */
     public boolean[][] getGrafoMatrizAdy() {
         boolean[][] grafo = new boolean[nodes.size()][nodes.size()];
-        System.out.println("Size = " + nodes.size());
+        //System.out.println("Size = " + nodes.size());
         int count = 0;
         for (Iterator<Node> it = nodes.iterator(); it.hasNext();) {
             Node node = it.next();
@@ -570,6 +575,12 @@ public class GraphPanel extends JPanel
         return grafo;
     }
 
+    /**
+     * Permite encontrar la posicion de una etiqueta que identifica a un nodo, en
+     * la lista de nodos
+     * @param etiqueta Identificador de nodo
+     * @return La posicion del nodo en la lista
+     */
     private int findPosition(String etiqueta) {
         int count = 0;
         for (Iterator<Node> it = nodes.iterator(); it.hasNext();) {
@@ -582,6 +593,11 @@ public class GraphPanel extends JPanel
         return -1;
     }
 
+    /**
+     * Genera una matriz aleatoria, que representa un grafo
+     * @param nroVertices Numero de vertices que tendrá el grafo
+     * @return Una matriz booleana que representa el grafo en matriz ADY
+     */
     public static boolean[][] generarMatrizAdyAleatoria(int nroVertices) {
         if (nroVertices > 100) {
             return null;
@@ -601,6 +617,11 @@ public class GraphPanel extends JPanel
 
     }
 
+    /**
+     * Permite Gardar un grafo en un archivo
+     * @param mAdy Matriz de adyacencia booleana que representa al grafo
+     * @return Verdadero si se completa la operacion
+     */
     public boolean guardarGrafo(boolean[][] mAdy) {
         FileWriter fichero = null;
         PrintWriter pw = null;
@@ -637,49 +658,14 @@ public class GraphPanel extends JPanel
         return true;
     }
 
+    /**
+     *  @deprecated
+     * @param nombreArchivo
+     * @return
+     */
     public boolean[][] leerGrafo(String nombreArchivo) {
         boolean mAdy[][] = null;
         return mAdy;
 
-    }
-
-    /**
-     * Este metodo realiza una rutina exhaustiva para determinar si el 
-     * grafo es o no hamiltoniano
-     * @param graph matriz de adyacencia booleana
-     * @return verdadero si el grafo es hamiltoniano, falso en caso contrario.
-     */
-    public boolean comprobarHamiltonicidadExhaustiva(boolean graph[][]) {
-        /**
-         * Algoritmo de referencia
-         *    begin
-        The following for-loop is the guessing stage/
-        for i=1 to n do
-        X[i] := choose(i);
-        endfor
-
-        /* Next is the verification stage */
-        /*
-        for i=1 to n do
-        for j=i+1 to n do
-        if X[i] = X[j] then
-        return(no);
-        endif
-        endfor
-        endfor
-        for i=1 to n-1 do
-        if (X[i],X[i+1]) is not an edge then
-        return(no);
-        endif
-        endfor
-        if (X[n],X[1]) is not an edge then
-        return(no);
-        endif
-
-        return(yes);
-        end[1]
-
-         */
-        return false;
     }
 }
