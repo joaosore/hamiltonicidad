@@ -90,7 +90,7 @@ public class Hamiltonicidad {
 
     /**
      * Permite saber si un vertice ha sido visitado
-     * @param vertice Vertice que se desea averiguar
+     * @param vertice Vertice que se desea consultar
      * @return Verdadero si el grafo ha sido visitado
      */
     private static boolean isVisitado(short vertice) {
