@@ -222,6 +222,10 @@ public class Hamiltonicidad {
      * Proposición 4.5.4. Un grafo simple con n vértices que tiene al menos
      * 0.5(n-2)(n-1)+2 aristas es hamiltoniano
      */
+    /**
+     * Comprobacion de la proposicion 2
+     * @return Verdadero si el grafo cumple
+     */
     private static boolean comprobarNroAristas() {
         short vertices = getNroVertices();
         return ((0.5 * (vertices - 1) * (vertices - 2) + 2) <= getNroAristas() ? true : false);
