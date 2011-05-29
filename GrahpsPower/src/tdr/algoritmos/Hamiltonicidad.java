@@ -15,6 +15,9 @@ public class Hamiltonicidad {
     // private static short vertActual;
     private static short[] visitados;
     private static short conteo = -1;
+    private static boolean mAuxADY[][] = {{false, true, true, true, false},
+        {true, false, false, true, true}, {true, false, false, false, true},
+        {true, true, false, false, false}, {false, true, true, false, false}};
 
     /**
      * Comprueba si un grafo representado por una matriz de adyacencia es hamiltoniano
@@ -27,7 +30,7 @@ public class Hamiltonicidad {
         }
         Hamiltonicidad.mAdy = mAdy;
         nroVertices = Short.valueOf(String.valueOf(mAdy.length));
-        visitados = new short[nroVertices];       
+        visitados = new short[nroVertices];
         for (short j = 0; j < nroVertices; j++) {
             visitados[j] = -1;
         }
@@ -151,7 +154,14 @@ public class Hamiltonicidad {
     }
 
     static public void main(String args[]) {
-        System.out.println("Hamiltoniano =" + isHamiltoniano(GraphPanel.generarMatrizAdyAleatoria(100)));
+        //System.out.println("Hamiltoniano =" + isHamiltoniano(GraphPanel.generarMatrizAdyAleatoria(100)));
+        mAdy = mAuxADY;
+        printADY();
+        System.out.println("Aristas +>" + getNroAristas());
+        System.out.println("Comprobacion por vertices =>" + comprobarGradoDeVertices());
+        System.out.println("Comprobacion por nro de aristas +>" + comprobarNroAristas());
+        System.out.println("Grado del vertice 4 +>" + getGradoVertice((short) 3));
+
     }
 
     /**
@@ -165,5 +175,100 @@ public class Hamiltonicidad {
         System.out.println(" ]");
         System.out.println("Conteo => " + conteo);
 
+    }
+
+    private static void printADY() {
+        for (boolean[] bs : mAdy) {
+            for (boolean b : bs) {
+                System.out.print(b ? "1" : "0");
+            }
+            System.out.println("");
+        }
+    }
+
+    /***************************************************************************************
+     *Condiciones necesarias y suficientes                                                                                 *
+     ***************************************************************************************/
+    /**
+     * Proposición 4.5.3. Sea G=(V, E) un grafo simple. Si V = n >=3 y
+    deg(v) >=n / 2 para todo v en V , entonces G es hamiltoniano.
+     */
+    /**
+     * Comprobando proposicion 1
+     */
+    private static boolean comprobarGradoDeVertices() {
+        short vertices_CMP = getNroVertices();
+        if (vertices_CMP >= 3) {
+            vertices_CMP = (short) (vertices_CMP / 2);
+            for (boolean[] bs : mAdy) {
+                short deg = 0;
+                for (boolean b : bs) {
+                    if (b) {
+                        deg++;
+                    }
+                }
+                if (deg < vertices_CMP) {
+                    return false;
+                }
+            }
+        } else {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Proposición 4.5.4. Un grafo simple con n vértices que tiene al menos
+     * 0.5(n-2)(n-1)+2 aristas es hamiltoniano
+     */
+    private static boolean comprobarNroAristas() {
+        short vertices = getNroVertices();
+        return ((0.5 * (vertices - 1) * (vertices - 2) + 2) <= getNroAristas() ? true : false);
+    }
+
+    /**
+     * METODOS GENERALES
+     */
+    /**
+     * Este metodo indica cuantos vertices tiene un grafo
+     * representado como matriz de adyacencia
+     * @return numero de vertices del grafo
+     */
+    private static short getNroVertices() {
+        return (short) mAdy.length;
+    }
+
+    /**
+     * Este metodo retorna el numero de aristas que posee un grafo representado
+     * como matris de adyacencia booleana
+     * @return Numero de aristas del grafo.
+     */
+    private static short getNroAristas() {
+        short counter = 0;
+        for (int i = 0; i < mAdy.length; i++) {
+            for (int j = i + 1; j < mAdy.length; j++) {//Se leen solo los valores
+                if (mAdy[i][j]) {                        //Arriba de la diagonal ppal
+                    counter++;
+                }
+            }
+        }
+        return counter;
+    }
+
+    /**
+     * Retorna el grado de un vertice
+     * @param vertice Indice del vertice en la matriz ady
+     * @return El grado del vertice
+     */
+    private static short getGradoVertice(short vertice) {
+        short count = 0;
+        for (boolean b : mAdy[vertice]) {
+            if (b) {
+                count++;
+            }
+        }
+
+        return count;
     }
 }

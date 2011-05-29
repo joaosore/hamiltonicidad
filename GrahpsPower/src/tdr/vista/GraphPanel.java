@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Random;
@@ -115,6 +116,9 @@ public class GraphPanel extends JPanel
                     edges.add(new Edge(n1, n2));
                 }
             }
+        } else if ("Borrar Arista".equals(cmd)) {
+            borrarVertices();
+
         } else if ("Borrar".equals(cmd)) {
             deleteSelected();
         } else if ("Comprobar Hamiltonicidad".equals(cmd)) {
@@ -301,9 +305,9 @@ public class GraphPanel extends JPanel
             menuItem = new JMenuItem("Borrar");
             menuItem.addActionListener(GraphPanel.this);
             popup.add(menuItem);
-            // menuItem = new JMenuItem("ListaConexiones");
-            //menuItem.addActionListener(GraphPanel.this);
-            //popup.add(menuItem);
+            menuItem = new JMenuItem("Borrar Arista");
+            menuItem.addActionListener(GraphPanel.this);
+            popup.add(menuItem);
             menuItem = new JMenuItem("Comprobar Hamiltonicidad");
             menuItem.addActionListener(GraphPanel.this);
             popup.add(menuItem);
@@ -656,6 +660,70 @@ public class GraphPanel extends JPanel
             return false;
         }
         return true;
+    }
+
+    private void borrarVertices() {
+        ListIterator<Node> iter = nodes.listIterator();
+        short countVertices = 0;
+        Node aux = null;
+        while (iter.hasNext()) {
+            Node n = iter.next();
+            if (n.isSelected()) {
+                countVertices++;
+                aux = n;
+            }
+        }
+        if (countVertices > 1) {
+            JOptionPane.showMessageDialog(this, "Ha seleccionado más de un vértice");
+            return;
+        }
+        if (aux != null) {
+            ListIterator<Edge> iterE = edges.listIterator();
+            //Creamos interfaz grafica
+            JPanel panelBorrado = new JPanel();
+            panelBorrado.setLayout(new GridLayout(0, 1));
+            LinkedList<JCheckBox> verticesSeleccionados = new LinkedList<JCheckBox>();
+            while (iterE.hasNext()) {
+                Edge e = iterE.next();
+                if (e.n1 == aux || e.n2 == aux) {
+                    System.out.println("Arista de " + e.n1.getEtiqueta() + " A " + e.n2.getEtiqueta());
+                    verticesSeleccionados.add(new JCheckBox("Arista de " + aux.getEtiqueta() + " A "
+                            + (e.n1.getEtiqueta().equalsIgnoreCase(aux.getEtiqueta()) ? e.n2.getEtiqueta() : e.n1.getEtiqueta())));
+                    Iterator<JCheckBox> itCheck = verticesSeleccionados.iterator();
+                    while (itCheck.hasNext()) {
+                        panelBorrado.add(itCheck.next());
+                    }
+                }
+            }
+            if (verticesSeleccionados.size() == 0) {
+                return;
+            }
+            if (JOptionPane.showConfirmDialog(this, panelBorrado, "Seleccione las Aristas que desea borrar", JOptionPane.OK_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.OK_OPTION) {
+                Iterator<JCheckBox> itCheck = verticesSeleccionados.iterator();
+                while (itCheck.hasNext()) {
+                    JCheckBox checkAux = itCheck.next();
+                    if (checkAux.isSelected()) {
+                        System.out.println("Borrar " + checkAux.getText() + iter.hasNext());
+                        iterE = edges.listIterator();
+                        while (iterE.hasNext()) {
+                            Edge e = iterE.next();
+                            String etiquetaCheck = checkAux.getText();
+                            System.out.println(etiquetaCheck.indexOf(e.n1.getEtiqueta()));
+                            System.out.println(etiquetaCheck.indexOf(e.n2.getEtiqueta()));
+                            if (etiquetaCheck.indexOf(e.n1.getEtiqueta()) != -1
+                                    && etiquetaCheck.indexOf(e.n2.getEtiqueta()) != -1) {
+                                iterE.remove();
+                                System.out.println("Borrando" + etiquetaCheck);
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            return;
+        }
+
+        this.repaint();
     }
 
     /**
