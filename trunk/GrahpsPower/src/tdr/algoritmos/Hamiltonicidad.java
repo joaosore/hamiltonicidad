@@ -161,6 +161,7 @@ public class Hamiltonicidad {
         System.out.println("Comprobacion por vertices =>" + comprobarGradoDeVertices());
         System.out.println("Comprobacion por nro de aristas +>" + comprobarNroAristas());
         System.out.println("Grado del vertice 4 +>" + getGradoVertice((short) 3));
+        System.out.println("Comprobacion por vertices no conectados"+comprobarGradoVerticesNoConectados());
 
     }
 
@@ -232,6 +233,29 @@ public class Hamiltonicidad {
     }
 
     /**
+     * Proposición 4.5.5. Sea G=(V, A) un grafo simple con V =n >=3 . 
+     * Si para todo par de vértices u y v que no están conectados se cumple que
+     * deg(u) +deg(v) >=n , entonces G es hamiltoniano.
+     */
+    private static boolean comprobarGradoVerticesNoConectados() {
+        short vertices = getNroVertices();
+        for (short i = 0; i < mAdy.length; i++) {
+            short gradoU = getGradoVertice(i);
+            for (short j = (short) (i + 1); j < mAdy.length; j++) {//Se leen solo los valores
+                //Arriba de la diagonal ppal
+                if (!mAdy[i][j]) {
+                    short gradoV = getGradoVertice(j);
+                    if (gradoU + gradoV < vertices) {
+                        System.out.println("i,j"+i+","+j);
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
      * METODOS GENERALES
      */
     /**
@@ -272,7 +296,6 @@ public class Hamiltonicidad {
                 count++;
             }
         }
-
         return count;
     }
 }
