@@ -256,6 +256,31 @@ public class Hamiltonicidad {
     }
 
     /**
+     * ME encargo de esto por el momento
+     * @return 
+     */
+    
+    private static boolean tieneVertCorte(){
+        int a =cantCompConexas(mAdy);
+        for (int i = 0; i < mAdy.length; i++) {
+            int b=cantCompConexas(quitarVertice(i));
+            if(b>a)
+                return true;
+            
+        }
+        return false;
+    }
+    
+    private static int cantCompConexas(boolean [][] matriz){
+        return 1;
+    }
+    
+    public static boolean [][] quitarVertice(int vertice){
+        boolean [][] matAux=new boolean[mAdy.length-1][mAdy.length-1];
+        return matAux;
+    }
+    
+    /**
      * METODOS GENERALES
      */
     /**
