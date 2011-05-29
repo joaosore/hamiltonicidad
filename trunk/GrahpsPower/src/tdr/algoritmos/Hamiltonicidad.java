@@ -260,6 +260,7 @@ public class Hamiltonicidad {
      * @return 
      */
     
+    
     private static boolean tieneVertCorte(){
         int a =cantCompConexas(mAdy);
         for (int i = 0; i < mAdy.length; i++) {
