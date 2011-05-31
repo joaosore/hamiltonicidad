@@ -17,7 +17,7 @@ public class Hamiltonicidad {
     private static short[] visitados2;
     private static boolean [][]matAu;
     private static short conteo = -1;
-   /* private static boolean mAuxADY[][] = {{false, true, true, true, false},
+    /*private static boolean mAuxADY[][] = {{false, true, true, true, false},
         {true, false, false, true, true}, {true, false, false, false, true},
         {true, true, false, false, false}, {false, true, true, false, false}};*/
     private static boolean mAuxADY[][] = {{false, true, true, false, false},
@@ -161,12 +161,12 @@ public class Hamiltonicidad {
         //System.out.println("Hamiltoniano =" + isHamiltoniano(GraphPanel.generarMatrizAdyAleatoria(100)));
         mAdy = mAuxADY;
       //  printADY(mAdy);
-      /*  System.out.println("Aristas +>" + getNroAristas());
+        System.out.println("Aristas +>" + getNroAristas());
         System.out.println("Comprobacion por vertices =>" + comprobarGradoDeVertices());
         System.out.println("Comprobacion por nro de aristas +>" + comprobarNroAristas());
-        System.out.println("Grado del vertice 4 +>" + getGradoVertice((short) 3));
-        System.out.println("Comprobacion por vertices no conectados"+comprobarGradoVerticesNoConectados());*/
-       System.out.println("Comprobacion vertice corte "+tieneVertCorte());
+        //System.out.println("Grado del vertice 4 +>" + getGradoVertice((short) 3));
+        System.out.println("Comprobacion por vertices no conectados =>"+comprobarGradoVerticesNoConectados());
+        System.out.println("Comprobacion vertice corte =>"+tieneVertCorte());
      //    printADY(quitarVertice((short)2));
       //  System.out.println("Comprobacion componentes conexas"+cantCompConexas(mAdy));
     }
@@ -247,13 +247,15 @@ public class Hamiltonicidad {
         short vertices = getNroVertices();
         for (short i = 0; i < mAdy.length; i++) {
             short gradoU = getGradoVertice(i);
-            for (short j = (short) (i + 1); j < mAdy.length; j++) {//Se leen solo los valores
+            for (short j = 0; j < mAdy.length; j++) {//Se leen solo los valores
                 //Arriba de la diagonal ppal
-                if (!mAdy[i][j]) {
-                    short gradoV = getGradoVertice(j);
-                    if (gradoU + gradoV < vertices) {
-                        System.out.println("i,j"+i+","+j);
-                        return false;
+                if(i!=j){
+                    if (!mAdy[i][j]) {
+                        short gradoV = getGradoVertice(j);
+                        if (gradoU + gradoV < vertices) {
+                         //   System.out.println("i,j"+i+","+j);
+                            return false;
+                        }
                     }
                 }
             }
@@ -277,8 +279,7 @@ public class Hamiltonicidad {
         for (short i = 0; i < mAdy.length; i++) {
             int b=cantCompConexas(quitarVertice(i));
             if(b>a)
-                return true;
-            
+                return true;  
         }
         return false;
     }
