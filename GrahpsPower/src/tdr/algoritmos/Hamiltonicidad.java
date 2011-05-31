@@ -17,13 +17,12 @@ public class Hamiltonicidad {
     private static short[] visitados2;
     private static boolean [][]matAu;
     private static short conteo = -1;
-   /* private static boolean mAuxADY[][] = {{false, true, true, true, false},
+    private static boolean mAuxADY[][] = {{false, true, true, true, false},
         {true, false, false, true, true}, {true, false, false, false, true},
-        {true, true, false, false, false}, {false, true, true, false, false}};*/
-    private static boolean mAuxADY[][] = {{false, true, true, false, false},
+        {true, true, false, false, false}, {false, true, true, false, false}};
+    /*private static boolean mAuxADY[][] = {{false, true, true, false, false},
         {true, false, false, true, false}, {true, false, false, true, false},
-        {false, true, true, false, true}, {false, false, false, true, false}};
-
+        {false, true, true, false, true}, {false, false, false, true, false}};*/
     /**
      * Comprueba si un grafo representado por una matriz de adyacencia es hamiltoniano
      * @param mAdy Matriz booleana con la representacion del grafo en matriz de adyacencia
@@ -268,6 +267,11 @@ public class Hamiltonicidad {
      */
     
     // http://codebreakerscorp.wordpress.com/2011/03/05/algoritmo-de-busqueda-depth-first-search/
+    
+    /**
+     * 
+     * @return 
+     */
     private static boolean tieneVertCorte(){
         int a =cantCompConexas(mAdy);
         for (short i = 0; i < mAdy.length; i++) {
@@ -278,17 +282,26 @@ public class Hamiltonicidad {
         }
         return false;
     }
-    
+    /**
+     * 
+     * @param matriz
+     * @return 
+     */
     private static int cantCompConexas(boolean [][] matriz){
         visitados2=new short[matriz.length];
         matAu=matriz;
         return recorrer((short)0, (short)matriz.length);
     }
-    
+    /**
+     * 
+     * @param v
+     * @param tam
+     * @return 
+     */
     public static int recorrer(short v, short tam){
         int componentes=0;
         visitados2[v]=1;
-        for(short i=1; i<tam;i++){
+        for(short i=0; i<tam;i++){
             if(matAu[v][i]){
                 if(visitados2[i]==0){
                     recorrer(i, tam);
