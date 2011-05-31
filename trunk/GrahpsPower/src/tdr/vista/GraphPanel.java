@@ -122,11 +122,15 @@ public class GraphPanel extends JPanel
         } else if ("Borrar".equals(cmd)) {
             deleteSelected();
         } else if ("Comprobar Hamiltonicidad".equals(cmd)) {
-            long timeIni = System.currentTimeMillis();
-            boolean res = tdr.algoritmos.Hamiltonicidad.isHamiltoniano(getGrafoMatrizAdy());
-            long timeFin = System.currentTimeMillis();
-            JOptionPane.showMessageDialog(null, (res ? new GraphPanel(Hamiltonicidad.getVisitados(), this) : "El Grafo no es Hamiltoniano"));
-            JOptionPane.showMessageDialog(null, "Tiempo de Ejecucion " + ((timeFin - timeIni) / 1000.0000f) + " Segundos");
+            // long timeIni = System.currentTimeMillis();
+            if( Hamiltonicidad.tieneVertCorte() || !(Hamiltonicidad.comprobarGradoDeVertices() || Hamiltonicidad.comprobarGradoVerticesNoConectados()||Hamiltonicidad.comprobarNroAristas())){
+                JOptionPane.showMessageDialog(this, "No es hamilton");
+            }else{
+            //long timeFin = System.currentTimeMillis();
+                boolean res = tdr.algoritmos.Hamiltonicidad.isHamiltoniano(getGrafoMatrizAdy());
+                JOptionPane.showMessageDialog(null, (res ? new GraphPanel(Hamiltonicidad.getVisitados(), this) : "El Grafo no es Hamiltoniano"));
+            }
+            //    JOptionPane.showMessageDialog(null, "Tiempo de Ejecucion " + ((timeFin - timeIni) / 1000.0000f) + " Segundos");
             // JOptionPane.showMessageDialog(this, (res ? "El grafo es conexo" : "El grafo no es conexo"));
         } else if ("Tipo".equals((cmd))) {
             kind = (Kind) kindBox.getSelectedItem();
@@ -611,12 +615,26 @@ public class GraphPanel extends JPanel
             Random rdn = new Random();
             grafo = new boolean[nroVertices][nroVertices];
             for (int i = 0; i < grafo.length; i++) {
-                boolean[] bs = grafo[i];
-                for (int j = 0; j < bs.length; j++) {
-                    bs[j] = rdn.nextBoolean();
+               // boolean[] bs = grafo[i];
+                for (int j = i; j < grafo.length; j++) {
+                    if (i != j) {
+                        grafo[i][j] = rdn.nextBoolean();
+                        grafo[j][i]=grafo[i][j];
+                    } else {
+                        grafo[i][j] = false;
+                    }
+                    
                 }
+               
             }
         }
+        for (boolean[] bs : grafo) {
+            for (boolean b : bs) {
+                System.out.print(b+"\t");
+            }
+            System.out.println("");
+        }
+        
         return grafo;
 
     }

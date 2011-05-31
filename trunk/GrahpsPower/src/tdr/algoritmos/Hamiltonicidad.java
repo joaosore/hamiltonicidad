@@ -1,5 +1,7 @@
 package tdr.algoritmos;
 
+import java.util.ArrayList;
+import java.util.Vector;
 import tdr.vista.GraphPanel;
 
 /**
@@ -15,14 +17,17 @@ public class Hamiltonicidad {
     // private static short vertActual;
     private static short[] visitados;
     private static short[] visitados2;
-    private static boolean [][]matAu;
+    private static boolean[][] matAu;
     private static short conteo = -1;
-    /*private static boolean mAuxADY[][] = {{false, true, true, true, false},
+    private static short verticeCorte;
+    private static short gradoVertices[];
+    private static boolean mAuxADY[][] = {{false, true, true, true, false},
         {true, false, false, true, true}, {true, false, false, false, true},
-        {true, true, false, false, false}, {false, true, true, false, false}};*/
-    private static boolean mAuxADY[][] = {{false, true, true, false, false},
-        {true, false, false, true, false}, {true, false, false, true, false},
-        {false, true, true, false, true}, {false, false, false, true, false}};
+        {true, true, false, false, false}, {false, true, true, false, false}};
+    /*  private static boolean mAuxADY[][] = {{false, true, true, false, false},
+    {true, false, false, true, false}, {true, false, false, true, false},
+    {false, true, true, false, true}, {false, false, false, true, false}};*/
+
     /**
      * Comprueba si un grafo representado por una matriz de adyacencia es hamiltoniano
      * @param mAdy Matriz booleana con la representacion del grafo en matriz de adyacencia
@@ -32,6 +37,7 @@ public class Hamiltonicidad {
         if (mAdy.length < 3) {//Si el grafo tiene menos de 3 vertices no es hamiltoniano
             return false;
         }
+
         Hamiltonicidad.mAdy = mAdy;
         nroVertices = Short.valueOf(String.valueOf(mAdy.length));
         visitados = new short[nroVertices];
@@ -39,12 +45,31 @@ public class Hamiltonicidad {
             visitados[j] = -1;
         }
         conteo = -1;
-        short verticeInicial = 0;
+        short verticeInicial = getIndiceMenorGrado();
         agregarVertice(verticeInicial);//Agregamos el primer vertice a el camino
         return comprobarCicloHamiltoniano(verticeInicial, mAdy[verticeInicial]);//Si encontro un ciclo retornar verdadero
 
     }
-
+    
+    private static short getIndiceMenorGrado(){
+        gradoVertices = new short[mAdy.length];
+        short indice = 0;
+        for (short i = 0; i < gradoVertices.length; i++) {
+            gradoVertices[i] = getGradoVertice(i);
+           // System.out.println("Org=>" + gradoVertices[i]);
+        }
+        short min = gradoVertices[0];
+        for (short i = 0; i < gradoVertices.length; i++) {
+            if(gradoVertices[i]<min){
+                min=gradoVertices[i];
+                indice=i;
+            }
+            
+        }
+        return indice;
+        
+    }
+   
     /**
      * Comprueba si existe un ciclo hamiltoniano utilizando la tecnica de backtracking
      * @param verticeActual indice en la mAdy del Vertice de partida del recorrido
@@ -74,7 +99,6 @@ public class Hamiltonicidad {
             //candidato para tratar de hallar una solucion
         }
 
-
         return false;
     }
 
@@ -85,14 +109,20 @@ public class Hamiltonicidad {
      * @return posicion en la matriz de adyacencia del proximo vertice no visitado
      */
     private static short escogerVertice(boolean vertice[]) {
+        short min = Short.MAX_VALUE;
+        short indice = -1;
         for (short i = 0; i < nroVertices; i++) {
             if (vertice[i]) {
                 if (!isVisitado(i)) {
-                    return i;
+                    if(gradoVertices[i]<min){
+                        min =gradoVertices[i];
+                        indice=i;
+                    }
+                   
                 }
             }
         }
-        return -1;
+        return indice;
     }
 
     /**
@@ -158,17 +188,20 @@ public class Hamiltonicidad {
     }
 
     static public void main(String args[]) {
-        //System.out.println("Hamiltoniano =" + isHamiltoniano(GraphPanel.generarMatrizAdyAleatoria(100)));
-        mAdy = mAuxADY;
-      //  printADY(mAdy);
-        System.out.println("Aristas +>" + getNroAristas());
+        System.out.println("Hamiltoniano =" + isHamiltoniano(GraphPanel.generarMatrizAdyAleatoria(100)));
+       // mAdy = mAuxADY;
+        //  printADY(mAdy);
+       /* System.out.println("Aristas +>" + getNroAristas());
         System.out.println("Comprobacion por vertices =>" + comprobarGradoDeVertices());
         System.out.println("Comprobacion por nro de aristas +>" + comprobarNroAristas());
         //System.out.println("Grado del vertice 4 +>" + getGradoVertice((short) 3));
-        System.out.println("Comprobacion por vertices no conectados =>"+comprobarGradoVerticesNoConectados());
-        System.out.println("Comprobacion vertice corte =>"+tieneVertCorte());
-     //    printADY(quitarVertice((short)2));
-      //  System.out.println("Comprobacion componentes conexas"+cantCompConexas(mAdy));
+        
+        System.out.println("Comprobacion vertice corte =>"+tieneVertCorte());*/
+        //    printADY(quitarVertice((short)2));
+        //  System.out.println("Comprobacion componentes conexas"+cantCompConexas(mAdy));
+        //System.out.println("Comprobacion por vertices no conectados =>" + comprobarGradoVerticesNoConectados());
+        //System.out.println("Organizar organizanizar " + organizarGrado());
+        //System.out.println("Menor Grado"+ getIndiceMenorGrado());
     }
 
     /**
@@ -184,7 +217,7 @@ public class Hamiltonicidad {
 
     }
 
-    private static void printADY(boolean [][] mat) {
+    private static void printADY(boolean[][] mat) {
         for (boolean[] bs : mat) {
             for (boolean b : bs) {
                 System.out.print(b ? "1" : "0");
@@ -203,7 +236,7 @@ public class Hamiltonicidad {
     /**
      * Comprobando proposicion 1
      */
-    private static boolean comprobarGradoDeVertices() {
+    public static boolean comprobarGradoDeVertices() {
         short vertices_CMP = getNroVertices();
         if (vertices_CMP >= 3) {
             vertices_CMP = (short) (vertices_CMP / 2);
@@ -233,7 +266,7 @@ public class Hamiltonicidad {
      * Comprobacion de la proposicion 2
      * @return Verdadero si el grafo cumple
      */
-    private static boolean comprobarNroAristas() {
+    public static boolean comprobarNroAristas() {
         short vertices = getNroVertices();
         return ((0.5 * (vertices - 1) * (vertices - 2) + 2) <= getNroAristas() ? true : false);
     }
@@ -243,19 +276,36 @@ public class Hamiltonicidad {
      * Si para todo par de vértices u y v que no están conectados se cumple que
      * deg(u) +deg(v) >=n , entonces G es hamiltoniano.
      */
-    private static boolean comprobarGradoVerticesNoConectados() {
+    /* private static boolean comprobarGradoVerticesNoConectados() {
+    short vertices = getNroVertices();
+    for (short i = 0; i < mAdy.length; i++) {
+    short gradoU = getGradoVertice(i);
+    for (short j = 0; j < mAdy.length; j++) {//Se leen solo los valores
+    //Arriba de la diagonal ppal
+    if(i!=j){
+    if (!mAdy[i][j]) {
+    short gradoV = getGradoVertice(j);
+    if (gradoU + gradoV < vertices) {
+    System.out.println("i,j"+i+","+j);
+    return false;
+    }
+    }
+    }
+    }
+    }
+    return true;
+    }*/
+    public static boolean comprobarGradoVerticesNoConectados() {
         short vertices = getNroVertices();
         for (short i = 0; i < mAdy.length; i++) {
             short gradoU = getGradoVertice(i);
-            for (short j = 0; j < mAdy.length; j++) {//Se leen solo los valores
+            for (short j = (short) (i + 1); j < mAdy.length; j++) {//Se leen solo los valores
                 //Arriba de la diagonal ppal
-                if(i!=j){
-                    if (!mAdy[i][j]) {
-                        short gradoV = getGradoVertice(j);
-                        if (gradoU + gradoV < vertices) {
-                         //   System.out.println("i,j"+i+","+j);
-                            return false;
-                        }
+                if (!mAdy[i][j]) {
+                    short gradoV = getGradoVertice(j);
+                    if (gradoU + gradoV < vertices) {
+                        System.out.println("i,j" + i + "," + j);
+                        return false;
                     }
                 }
             }
@@ -267,82 +317,84 @@ public class Hamiltonicidad {
      * ME encargo de esto por el momento
      * @return 
      */
-    
-    // http://codebreakerscorp.wordpress.com/2011/03/05/algoritmo-de-busqueda-depth-first-search/
-    
     /**
      * 
      * @return 
      */
-    private static boolean tieneVertCorte(){
-        int a =cantCompConexas(mAdy);
+    public static boolean tieneVertCorte() {
+        int a = cantCompConexas(mAdy);
         for (short i = 0; i < mAdy.length; i++) {
-            int b=cantCompConexas(quitarVertice(i));
-            if(b>a)
-                return true;  
+            int b = cantCompConexas(quitarVertice(i));
+            if (b > a) {
+                verticeCorte = i;
+            }
+            return true;
         }
         return false;
     }
+
     /**
      * 
      * @param matriz
      * @return 
      */
-    private static int cantCompConexas(boolean [][] matriz){
-        int componentes=0;
-        visitados2=new short[matriz.length];
-        matAu=matriz;
-        for(short i=0;i<matAu.length;i++){
-            if(visitados2[i]==0){
-                recorrer((short)0, (short)matriz.length);
+    private static int cantCompConexas(boolean[][] matriz) {
+        int componentes = 0;
+        visitados2 = new short[matriz.length];
+        matAu = matriz;
+        for (short i = 0; i < matAu.length; i++) {
+            if (visitados2[i] == 0) {
+                recorrer((short) 0, (short) matriz.length);
                 componentes++;
             }
-        
+
         }
         return componentes;
     }
+
     /**
      * 
      * @param v
      * @param tam
      * @return 
      */
-    public static void recorrer(short v, short tam){
-        visitados2[v]=1;
-        for(short i=0; i<tam;i++){
-            if(matAu[v][i]){
-                if(visitados2[i]==0){
+    public static void recorrer(short v, short tam) {
+        visitados2[v] = 1;
+        for (short i = 0; i < tam; i++) {
+            if (matAu[v][i]) {
+                if (visitados2[i] == 0) {
                     recorrer(i, tam);
                 }
             }
         }
     }
+
     /**
      * Elimina el vertice seleccionado
      * @param vertice vertice que se desea eliminar
      * @return una nueva matriz de adyacencia sin el vertice escogido
      */
-    public static boolean [][] quitarVertice(short vertice){
-        if(vertice>mAdy.length){
+    public static boolean[][] quitarVertice(short vertice) {
+        if (vertice > mAdy.length) {
             return null;
         }
-        boolean [][] matAux=new boolean[mAdy.length-1][mAdy.length-1];
-        short iaux=0, jaux=0;
+        boolean[][] matAux = new boolean[mAdy.length - 1][mAdy.length - 1];
+        short iaux = 0, jaux = 0;
         for (short i = 0; i < mAdy.length; i++) {
-            if(i!=vertice){
-                jaux=0;
+            if (i != vertice) {
+                jaux = 0;
                 for (short j = 0; j < mAdy.length; j++) {
-                    if(j != vertice){
-                        matAux[iaux][jaux]=mAdy[i][j];
+                    if (j != vertice) {
+                        matAux[iaux][jaux] = mAdy[i][j];
                         jaux++;
-                    }         
+                    }
                 }
                 iaux++;
-            }            
+            }
         }
         return matAux;
     }
-    
+
     /**
      * METODOS GENERALES
      */
@@ -385,5 +437,13 @@ public class Hamiltonicidad {
             }
         }
         return count;
+    }
+
+    /**
+     * 
+     * @return 
+     */
+    public static short getVerticeCorte() {
+        return verticeCorte;
     }
 }
