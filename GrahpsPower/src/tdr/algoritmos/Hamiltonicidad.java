@@ -33,12 +33,12 @@ public class Hamiltonicidad {
      * @param mAdy Matriz booleana con la representacion del grafo en matriz de adyacencia
      * @return Verdadero si el grafo es hamiltoniano (Posee un ciclo de hamilton)
      */
-    public static boolean isHamiltoniano(boolean mAdy[][]) {
+    public static boolean isHamiltoniano() {
         if (mAdy.length < 3) {//Si el grafo tiene menos de 3 vertices no es hamiltoniano
             return false;
         }
 
-        Hamiltonicidad.mAdy = mAdy;
+       // Hamiltonicidad.mAdy = mAdy;
         nroVertices = Short.valueOf(String.valueOf(mAdy.length));
         visitados = new short[nroVertices];
         for (short j = 0; j < nroVertices; j++) {
@@ -188,15 +188,16 @@ public class Hamiltonicidad {
     }
 
     static public void main(String args[]) {
-        System.out.println("Hamiltoniano =" + isHamiltoniano(GraphPanel.generarMatrizAdyAleatoria(100)));
-       // mAdy = mAuxADY;
+        //setMAdy(GraphPanel.generarMatrizAdyAleatoria(100));
+       // System.out.println("Hamiltoniano =" + isHamiltoniano());
+        mAdy = mAuxADY;
         //  printADY(mAdy);
        /* System.out.println("Aristas +>" + getNroAristas());
         System.out.println("Comprobacion por vertices =>" + comprobarGradoDeVertices());
         System.out.println("Comprobacion por nro de aristas +>" + comprobarNroAristas());
         //System.out.println("Grado del vertice 4 +>" + getGradoVertice((short) 3));
-        
-        System.out.println("Comprobacion vertice corte =>"+tieneVertCorte());*/
+        */
+        System.out.println("Comprobacion vertice corte =>"+tieneVertCorte());
         //    printADY(quitarVertice((short)2));
         //  System.out.println("Comprobacion componentes conexas"+cantCompConexas(mAdy));
         //System.out.println("Comprobacion por vertices no conectados =>" + comprobarGradoVerticesNoConectados());
@@ -327,8 +328,8 @@ public class Hamiltonicidad {
             int b = cantCompConexas(quitarVertice(i));
             if (b > a) {
                 verticeCorte = i;
+                return true;
             }
-            return true;
         }
         return false;
     }
@@ -445,5 +446,9 @@ public class Hamiltonicidad {
      */
     public static short getVerticeCorte() {
         return verticeCorte;
+    }
+
+    public static void setMAdy(boolean [][] matriz){
+        Hamiltonicidad.mAdy=matriz;
     }
 }
