@@ -123,11 +123,17 @@ public class GraphPanel extends JPanel
             deleteSelected();
         } else if ("Comprobar Hamiltonicidad".equals(cmd)) {
             // long timeIni = System.currentTimeMillis();
+            Hamiltonicidad.setMAdy(getGrafoMatrizAdy());
+            System.out.println("Vertice de corte"+Hamiltonicidad.tieneVertCorte());
+            System.out.println("comprobar grado vertices"+Hamiltonicidad.comprobarGradoDeVertices());
+            System.out.println("vertices no conectados"+Hamiltonicidad.comprobarGradoVerticesNoConectados());
+            System.out.println("comprobar nro aristas"+Hamiltonicidad.comprobarNroAristas());
             if( Hamiltonicidad.tieneVertCorte() || !(Hamiltonicidad.comprobarGradoDeVertices() || Hamiltonicidad.comprobarGradoVerticesNoConectados()||Hamiltonicidad.comprobarNroAristas())){
-                JOptionPane.showMessageDialog(this, "No es hamilton");
+                JOptionPane.showMessageDialog(this, "No es hamiltoniano");
             }else{
             //long timeFin = System.currentTimeMillis();
-                boolean res = tdr.algoritmos.Hamiltonicidad.isHamiltoniano(getGrafoMatrizAdy());
+                System.out.println("Evalua el algoritmo exaustivo");
+                boolean res = tdr.algoritmos.Hamiltonicidad.isHamiltoniano();
                 JOptionPane.showMessageDialog(null, (res ? new GraphPanel(Hamiltonicidad.getVisitados(), this) : "El Grafo no es Hamiltoniano"));
             }
             //    JOptionPane.showMessageDialog(null, "Tiempo de Ejecucion " + ((timeFin - timeIni) / 1000.0000f) + " Segundos");
@@ -557,7 +563,7 @@ public class GraphPanel extends JPanel
             String etiqueta = node.getEtiqueta();
             for (Iterator<Edge> itE = edges.iterator(); itE.hasNext();) {
                 Edge edge = itE.next();
-                System.out.print("(" + edge.getArista()[0] + "," + edge.getArista()[1] + "), ");
+                System.out.println("(" + edge.getArista()[0] + "," + edge.getArista()[1] + "), ");
                 if (etiqueta.equals(edge.n1.getEtiqueta())) {
                     int indice = findPosition(edge.n2.getEtiqueta());
                     if (indice == -1) {
