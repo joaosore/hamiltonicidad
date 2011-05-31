@@ -14,10 +14,15 @@ public class Hamiltonicidad {
     private static short nroVertices;
     // private static short vertActual;
     private static short[] visitados;
+    private static short[] visitados2;
+    private static boolean [][]matAu;
     private static short conteo = -1;
-    private static boolean mAuxADY[][] = {{false, true, true, true, false},
+   /* private static boolean mAuxADY[][] = {{false, true, true, true, false},
         {true, false, false, true, true}, {true, false, false, false, true},
-        {true, true, false, false, false}, {false, true, true, false, false}};
+        {true, true, false, false, false}, {false, true, true, false, false}};*/
+    private static boolean mAuxADY[][] = {{false, true, true, false, false},
+        {true, false, false, true, false}, {true, false, false, true, false},
+        {false, true, true, false, true}, {false, false, false, true, false}};
 
     /**
      * Comprueba si un grafo representado por una matriz de adyacencia es hamiltoniano
@@ -162,8 +167,9 @@ public class Hamiltonicidad {
         System.out.println("Comprobacion por nro de aristas +>" + comprobarNroAristas());
         System.out.println("Grado del vertice 4 +>" + getGradoVertice((short) 3));
         System.out.println("Comprobacion por vertices no conectados"+comprobarGradoVerticesNoConectados());*/
-       // System.out.println("Comprobacion vertice corte"+tieneVertCorte());
+       System.out.println("Comprobacion vertice corte "+tieneVertCorte());
      //    printADY(quitarVertice((short)2));
+      //  System.out.println("Comprobacion componentes conexas"+cantCompConexas(mAdy));
     }
 
     /**
@@ -261,7 +267,7 @@ public class Hamiltonicidad {
      * @return 
      */
     
-    
+    // http://codebreakerscorp.wordpress.com/2011/03/05/algoritmo-de-busqueda-depth-first-search/
     private static boolean tieneVertCorte(){
         int a =cantCompConexas(mAdy);
         for (short i = 0; i < mAdy.length; i++) {
@@ -274,10 +280,24 @@ public class Hamiltonicidad {
     }
     
     private static int cantCompConexas(boolean [][] matriz){
-        
-        return 1;
+        visitados2=new short[matriz.length];
+        matAu=matriz;
+        return recorrer((short)0, (short)matriz.length);
     }
     
+    public static int recorrer(short v, short tam){
+        int componentes=0;
+        visitados2[v]=1;
+        for(short i=1; i<tam;i++){
+            if(matAu[v][i]){
+                if(visitados2[i]==0){
+                    recorrer(i, tam);
+                    componentes++;
+                }
+            }
+        }
+        return componentes;
+    }
     /**
      * Elimina el vertice seleccionado
      * @param vertice vertice que se desea eliminar
