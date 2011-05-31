@@ -156,13 +156,14 @@ public class Hamiltonicidad {
     static public void main(String args[]) {
         //System.out.println("Hamiltoniano =" + isHamiltoniano(GraphPanel.generarMatrizAdyAleatoria(100)));
         mAdy = mAuxADY;
-        printADY();
-        System.out.println("Aristas +>" + getNroAristas());
+      //  printADY(mAdy);
+      /*  System.out.println("Aristas +>" + getNroAristas());
         System.out.println("Comprobacion por vertices =>" + comprobarGradoDeVertices());
         System.out.println("Comprobacion por nro de aristas +>" + comprobarNroAristas());
         System.out.println("Grado del vertice 4 +>" + getGradoVertice((short) 3));
-        System.out.println("Comprobacion por vertices no conectados"+comprobarGradoVerticesNoConectados());
-
+        System.out.println("Comprobacion por vertices no conectados"+comprobarGradoVerticesNoConectados());*/
+       // System.out.println("Comprobacion vertice corte"+tieneVertCorte());
+     //    printADY(quitarVertice((short)2));
     }
 
     /**
@@ -178,8 +179,8 @@ public class Hamiltonicidad {
 
     }
 
-    private static void printADY() {
-        for (boolean[] bs : mAdy) {
+    private static void printADY(boolean [][] mat) {
+        for (boolean[] bs : mat) {
             for (boolean b : bs) {
                 System.out.print(b ? "1" : "0");
             }
@@ -263,7 +264,7 @@ public class Hamiltonicidad {
     
     private static boolean tieneVertCorte(){
         int a =cantCompConexas(mAdy);
-        for (int i = 0; i < mAdy.length; i++) {
+        for (short i = 0; i < mAdy.length; i++) {
             int b=cantCompConexas(quitarVertice(i));
             if(b>a)
                 return true;
@@ -273,11 +274,33 @@ public class Hamiltonicidad {
     }
     
     private static int cantCompConexas(boolean [][] matriz){
+        
         return 1;
     }
     
-    public static boolean [][] quitarVertice(int vertice){
+    /**
+     * Elimina el vertice seleccionado
+     * @param vertice vertice que se desea eliminar
+     * @return una nueva matriz de adyacencia sin el vertice escogido
+     */
+    public static boolean [][] quitarVertice(short vertice){
+        if(vertice>mAdy.length){
+            return null;
+        }
         boolean [][] matAux=new boolean[mAdy.length-1][mAdy.length-1];
+        short iaux=0, jaux=0;
+        for (short i = 0; i < mAdy.length; i++) {
+            if(i!=vertice){
+                jaux=0;
+                for (short j = 0; j < mAdy.length; j++) {
+                    if(j != vertice){
+                        matAux[iaux][jaux]=mAdy[i][j];
+                        jaux++;
+                    }         
+                }
+                iaux++;
+            }            
+        }
         return matAux;
     }
     
