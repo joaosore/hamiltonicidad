@@ -17,12 +17,12 @@ public class Hamiltonicidad {
     private static short[] visitados2;
     private static boolean [][]matAu;
     private static short conteo = -1;
-    private static boolean mAuxADY[][] = {{false, true, true, true, false},
+   /* private static boolean mAuxADY[][] = {{false, true, true, true, false},
         {true, false, false, true, true}, {true, false, false, false, true},
-        {true, true, false, false, false}, {false, true, true, false, false}};
-    /*private static boolean mAuxADY[][] = {{false, true, true, false, false},
+        {true, true, false, false, false}, {false, true, true, false, false}};*/
+    private static boolean mAuxADY[][] = {{false, true, true, false, false},
         {true, false, false, true, false}, {true, false, false, true, false},
-        {false, true, true, false, true}, {false, false, false, true, false}};*/
+        {false, true, true, false, true}, {false, false, false, true, false}};
     /**
      * Comprueba si un grafo representado por una matriz de adyacencia es hamiltoniano
      * @param mAdy Matriz booleana con la representacion del grafo en matriz de adyacencia
@@ -288,9 +288,17 @@ public class Hamiltonicidad {
      * @return 
      */
     private static int cantCompConexas(boolean [][] matriz){
+        int componentes=0;
         visitados2=new short[matriz.length];
         matAu=matriz;
-        return recorrer((short)0, (short)matriz.length);
+        for(short i=0;i<matAu.length;i++){
+            if(visitados2[i]==0){
+                recorrer((short)0, (short)matriz.length);
+                componentes++;
+            }
+        
+        }
+        return componentes;
     }
     /**
      * 
@@ -298,18 +306,15 @@ public class Hamiltonicidad {
      * @param tam
      * @return 
      */
-    public static int recorrer(short v, short tam){
-        int componentes=0;
+    public static void recorrer(short v, short tam){
         visitados2[v]=1;
         for(short i=0; i<tam;i++){
             if(matAu[v][i]){
                 if(visitados2[i]==0){
                     recorrer(i, tam);
-                    componentes++;
                 }
             }
         }
-        return componentes;
     }
     /**
      * Elimina el vertice seleccionado
