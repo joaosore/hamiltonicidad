@@ -19,7 +19,7 @@ public class Hamiltonicidad {
     private static short[] visitados2;
     private static boolean[][] matAu;
     private static short conteo = -1;
-    private static short verticeCorte;
+    private static short verticeCorte=-1;
     private static short gradoVertices[];
     private static boolean mAuxADY[][] = {{false, true, true, true, false},
         {true, false, false, true, true}, {true, false, false, false, true},
@@ -277,25 +277,6 @@ public class Hamiltonicidad {
      * Si para todo par de vértices u y v que no están conectados se cumple que
      * deg(u) +deg(v) >=n , entonces G es hamiltoniano.
      */
-    /* private static boolean comprobarGradoVerticesNoConectados() {
-    short vertices = getNroVertices();
-    for (short i = 0; i < mAdy.length; i++) {
-    short gradoU = getGradoVertice(i);
-    for (short j = 0; j < mAdy.length; j++) {//Se leen solo los valores
-    //Arriba de la diagonal ppal
-    if(i!=j){
-    if (!mAdy[i][j]) {
-    short gradoV = getGradoVertice(j);
-    if (gradoU + gradoV < vertices) {
-    System.out.println("i,j"+i+","+j);
-    return false;
-    }
-    }
-    }
-    }
-    }
-    return true;
-    }*/
     public static boolean comprobarGradoVerticesNoConectados() {
         short vertices = getNroVertices();
         for (short i = 0; i < mAdy.length; i++) {
@@ -315,12 +296,8 @@ public class Hamiltonicidad {
     }
 
     /**
-     * ME encargo de esto por el momento
-     * @return 
-     */
-    /**
      * 
-     * @return 
+     * @return true si el grafo tienevertice de corte y false en caso contrario
      */
     public static boolean tieneVertCorte() {
         int a = cantCompConexas(mAdy);
@@ -335,9 +312,10 @@ public class Hamiltonicidad {
     }
 
     /**
-     * 
-     * @param matriz
-     * @return 
+     * Halla la cantidad de componentes conexas del grafo
+     * @param matriz matriz de adyacencia que en donde se halla el numero de
+     * componentes conexas
+     * @return numero de componentes conexas del grafo
      */
     private static int cantCompConexas(boolean[][] matriz) {
         int componentes = 0;
@@ -345,26 +323,23 @@ public class Hamiltonicidad {
         matAu = matriz;
         for (short i = 0; i < matAu.length; i++) {
             if (visitados2[i] == 0) {
-                recorrer((short) 0, (short) matriz.length);
+                recorrer((short) 0);
                 componentes++;
             }
-
         }
         return componentes;
     }
 
     /**
-     * 
-     * @param v
-     * @param tam
-     * @return 
+     * Recorrido DFS del la matriz de adyacencia
+     * @param v vertice que visita
      */
-    public static void recorrer(short v, short tam) {
+    public static void recorrer(short v) {
         visitados2[v] = 1;
-        for (short i = 0; i < tam; i++) {
+        for (short i = 0; i < matAu.length; i++) {
             if (matAu[v][i]) {
                 if (visitados2[i] == 0) {
-                    recorrer(i, tam);
+                    recorrer(i);
                 }
             }
         }
@@ -447,7 +422,10 @@ public class Hamiltonicidad {
     public static short getVerticeCorte() {
         return verticeCorte;
     }
-
+    /**
+     * 
+     * @param matriz 
+     */
     public static void setMAdy(boolean [][] matriz){
         Hamiltonicidad.mAdy=matriz;
     }

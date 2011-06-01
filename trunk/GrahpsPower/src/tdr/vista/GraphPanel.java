@@ -22,8 +22,8 @@ import tdr.algoritmos.Hamiltonicidad;
 public class GraphPanel extends JPanel
         implements ActionListener, ChangeListener {
 
-    private static final int WIDE = 580;
-    private static final int HIGH = 480;
+    private static final int WIDE = 1024;
+    private static final int HIGH = 768;
     private static final int RADIUS = 15;
     protected ControlPanel control;
     private int radius = RADIUS;
@@ -128,9 +128,21 @@ public class GraphPanel extends JPanel
             System.out.println("comprobar grado vertices"+Hamiltonicidad.comprobarGradoDeVertices());
             System.out.println("vertices no conectados"+Hamiltonicidad.comprobarGradoVerticesNoConectados());
             System.out.println("comprobar nro aristas"+Hamiltonicidad.comprobarNroAristas());
-            if( Hamiltonicidad.tieneVertCorte() || !(Hamiltonicidad.comprobarGradoDeVertices() || Hamiltonicidad.comprobarGradoVerticesNoConectados()||Hamiltonicidad.comprobarNroAristas())){
-                JOptionPane.showMessageDialog(this, "No es hamiltoniano");
+            if( Hamiltonicidad.tieneVertCorte() ){
+                JOptionPane.showMessageDialog(this, "No es hamiltoniano \n Tiene vertice de corte"+Hamiltonicidad.getVerticeCorte());
             }else{
+                if(Hamiltonicidad.comprobarGradoDeVertices()){
+                
+                }else{
+                    if(Hamiltonicidad.comprobarGradoVerticesNoConectados()){
+                    
+                    }
+                    else{
+                        if(Hamiltonicidad.comprobarNroAristas()){
+                        
+                        }
+                    }
+                }
             //long timeFin = System.currentTimeMillis();
                 System.out.println("Evalua el algoritmo exaustivo");
                 boolean res = tdr.algoritmos.Hamiltonicidad.isHamiltoniano();
