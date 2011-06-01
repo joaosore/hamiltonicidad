@@ -8,13 +8,12 @@ import tdr.vista.GraphPanel;
  *
  * @author Alejandro Perez
  * @author Sebastian Ramirez
+ * @author Lina piedrahita
  */
 public class Hamiltonicidad {
 
     private static boolean mAdy[][];
-    //  private static boolean copiaMAdy[][];
     private static short nroVertices;
-    // private static short vertActual;
     private static short[] visitados;
     private static short[] visitados2;
     private static boolean[][] matAu;
@@ -50,13 +49,16 @@ public class Hamiltonicidad {
         return comprobarCicloHamiltoniano(verticeInicial, mAdy[verticeInicial]);//Si encontro un ciclo retornar verdadero
 
     }
-    
+
+    /*
+     *Metodo que retorna el vertice con el menor grado.
+     *@return vertice con menor grado
+     */
     private static short getIndiceMenorGrado(){
         gradoVertices = new short[mAdy.length];
         short indice = 0;
         for (short i = 0; i < gradoVertices.length; i++) {
             gradoVertices[i] = getGradoVertice(i);
-           // System.out.println("Org=>" + gradoVertices[i]);
         }
         short min = gradoVertices[0];
         for (short i = 0; i < gradoVertices.length; i++) {
@@ -64,12 +66,11 @@ public class Hamiltonicidad {
                 min=gradoVertices[i];
                 indice=i;
             }
-            
+
         }
         return indice;
-        
-    }
-   
+     }
+
     /**
      * Comprueba si existe un ciclo hamiltoniano utilizando la tecnica de backtracking
      * @param verticeActual indice en la mAdy del Vertice de partida del recorrido
@@ -77,16 +78,13 @@ public class Hamiltonicidad {
      * @return Verdadero si existe un ciclo de hamilton
      */
     private static boolean comprobarCicloHamiltoniano(short verticeActual, boolean[] vertice) {
-        //  System.out.println("Vertice actual = " + verticeActual);
         short sigVertice = -1;//Indice del vertice siguiente
         boolean aux[] = new boolean[vertice.length];//Siguiente vertice representado como array booleano
         if (isCiclo()) {//Invocamos al metodo isCiclo, que comprueba si hay una solucion
-            //    System.out.println("TIENE CICLO HAMILTONIANO " + (visitados[0] + 1));
             return true;
         }
-        System.arraycopy(vertice, 0, aux, 0, aux.length);//C
+        System.arraycopy(vertice, 0, aux, 0, aux.length);
         sigVertice = escogerVertice(aux);
-        //    System.out.println("Vertice escogido = " + sigVertice);
         while (sigVertice != -1) {
             agregarVertice(sigVertice);
             aux[sigVertice] = false;//Borramos el vertice escogido de el vector de adyacencias
@@ -98,7 +96,6 @@ public class Hamiltonicidad {
             sigVertice = escogerVertice(aux);//Traemos el siguiente vertice
             //candidato para tratar de hallar una solucion
         }
-
         return false;
     }
 
@@ -118,7 +115,7 @@ public class Hamiltonicidad {
                         min =gradoVertices[i];
                         indice=i;
                     }
-                   
+
                 }
             }
         }
@@ -169,7 +166,6 @@ public class Hamiltonicidad {
     private static void agregarVertice(short vert) {
         visitados[++conteo] = vert;
     }
-
     /**
      * Borra el ultimo vertice, ya que conteo es el indice del vector de visitados
      */
@@ -188,22 +184,9 @@ public class Hamiltonicidad {
     }
 
     static public void main(String args[]) {
-        //setMAdy(GraphPanel.generarMatrizAdyAleatoria(100));
-       // System.out.println("Hamiltoniano =" + isHamiltoniano());
         mAdy = mAuxADY;
-        //  printADY(mAdy);
-       /* System.out.println("Aristas +>" + getNroAristas());
-        System.out.println("Comprobacion por vertices =>" + comprobarGradoDeVertices());
-        System.out.println("Comprobacion por nro de aristas +>" + comprobarNroAristas());
-        //System.out.println("Grado del vertice 4 +>" + getGradoVertice((short) 3));
-        */
         System.out.println("Comprobacion vertice corte =>"+tieneVertCorte());
-        //    printADY(quitarVertice((short)2));
-        //  System.out.println("Comprobacion componentes conexas"+cantCompConexas(mAdy));
-        //System.out.println("Comprobacion por vertices no conectados =>" + comprobarGradoVerticesNoConectados());
-        //System.out.println("Organizar organizanizar " + organizarGrado());
-        //System.out.println("Menor Grado"+ getIndiceMenorGrado());
-    }
+      }
 
     /**
      * Imprime en consola el vector de Caminos
@@ -215,7 +198,6 @@ public class Hamiltonicidad {
         }
         System.out.println(" ]");
         System.out.println("Conteo => " + conteo);
-
     }
 
     private static void printADY(boolean[][] mat) {
@@ -236,10 +218,11 @@ public class Hamiltonicidad {
      */
     /**
      * Comprobando proposicion 1
+     * @return verdadera si se cumple la condición
      */
     public static boolean comprobarGradoDeVertices() {
         short vertices_CMP = getNroVertices();
-        if (vertices_CMP >= 3) {
+        if (vertices_CMP >= 3) {//verifica si el numero de vertices es mayo a 3.
             vertices_CMP = (short) (vertices_CMP / 2);
             for (boolean[] bs : mAdy) {
                 short deg = 0;
@@ -248,7 +231,7 @@ public class Hamiltonicidad {
                         deg++;
                     }
                 }
-                if (deg < vertices_CMP) {
+                if (deg < vertices_CMP) {//verifica si deg(v)>=n/2
                     return false;
                 }
             }
@@ -273,7 +256,7 @@ public class Hamiltonicidad {
     }
 
     /**
-     * Proposición 4.5.5. Sea G=(V, A) un grafo simple con V =n >=3 . 
+     * Proposición 4.5.5. Sea G=(V, A) un grafo simple con V =n >=3 .
      * Si para todo par de vértices u y v que no están conectados se cumple que
      * deg(u) +deg(v) >=n , entonces G es hamiltoniano.
      */
@@ -296,8 +279,9 @@ public class Hamiltonicidad {
     }
 
     /**
-     * 
-     * @return true si el grafo tienevertice de corte y false en caso contrario
+     * Proposición 4.5.9. Si un grafo tiene un vértice corte, entonces no
+     * es hamiltoniano.
+     * @return true si el grafo tiene vertice de corte y false en caso contrario.
      */
     public static boolean tieneVertCorte() {
         int a = cantCompConexas(mAdy);
@@ -313,7 +297,7 @@ public class Hamiltonicidad {
 
     /**
      * Halla la cantidad de componentes conexas del grafo
-     * @param matriz matriz de adyacencia que en donde se halla el numero de
+     * @param matriz matriz de adyacencia en donde se halla el numero de
      * componentes conexas
      * @return numero de componentes conexas del grafo
      */
@@ -416,15 +400,15 @@ public class Hamiltonicidad {
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return el vertice de corte
      */
     public static short getVerticeCorte() {
         return verticeCorte;
     }
     /**
-     * 
-     * @param matriz 
+     *
+     * @param matriz
      */
     public static void setMAdy(boolean [][] matriz){
         Hamiltonicidad.mAdy=matriz;
