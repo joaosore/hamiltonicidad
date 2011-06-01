@@ -75,7 +75,6 @@ public class GraphPanel extends JPanel
         this.repaint();
     }
 
-    @Override
     public void paintComponent(Graphics g) {
         g.setColor(new Color(0x00f0f0f0));
         g.fillRect(0, 0, getWidth(), getHeight());
@@ -92,6 +91,7 @@ public class GraphPanel extends JPanel
         }
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         Color color = control.colorIcon.getColor();
         String cmd = e.getActionCommand();
@@ -122,37 +122,33 @@ public class GraphPanel extends JPanel
         } else if ("Borrar".equals(cmd)) {
             deleteSelected();
         } else if ("Comprobar Hamiltonicidad".equals(cmd)) {
-            // long timeIni = System.currentTimeMillis();
             Hamiltonicidad.setMAdy(getGrafoMatrizAdy());
-            System.out.println("Vertice de corte"+Hamiltonicidad.tieneVertCorte());
-            System.out.println("comprobar grado vertices"+Hamiltonicidad.comprobarGradoDeVertices());
-            System.out.println("vertices no conectados"+Hamiltonicidad.comprobarGradoVerticesNoConectados());
-            System.out.println("comprobar nro aristas"+Hamiltonicidad.comprobarNroAristas());
+            /*
+             * Se evalúan las condiciones necesarias y suficientes para
+             * determinar hamiltonicidad en un grafo
+             */
             if( Hamiltonicidad.tieneVertCorte() ){
-                JOptionPane.showMessageDialog(this, "No es hamiltoniano \n Tiene vertice de corte "+(Hamiltonicidad.getVerticeCorte()+1));
+                JOptionPane.showMessageDialog(this, "No es hamiltoniano \n Tiene vertice de corte"+Hamiltonicidad.getVerticeCorte());
             }else{
                 if(Hamiltonicidad.comprobarGradoDeVertices()){
-                    JOptionPane.showMessageDialog(this,"Es Hamiltoniano \n Cumple que deg(v) >= n / 2" );
+
                 }else{
                     if(Hamiltonicidad.comprobarGradoVerticesNoConectados()){
-                        JOptionPane.showMessageDialog(this,"Es Hamiltoniano \n Cumple que deg(u) + deg(v) >= n" );
+
                     }
                     else{
                         if(Hamiltonicidad.comprobarNroAristas()){
-                            JOptionPane.showMessageDialog(this,"Es Hamiltoniano \n Cumple que que tiene al menos 1/2*(n-1)*(n-2) aristas");
-                        }else{
-                            System.out.println("Evalua el algoritmo exaustivo");
-                            boolean res = tdr.algoritmos.Hamiltonicidad.isHamiltoniano();
-                            JOptionPane.showMessageDialog(null, (res ? new GraphPanel(Hamiltonicidad.getVisitados(), this) : "El Grafo no es Hamiltoniano"));
+
                         }
                     }
                 }
-            //long timeFin = System.currentTimeMillis();
-                
+                System.out.println("Evalua el algoritmo exaustivo");
+                boolean res = tdr.algoritmos.Hamiltonicidad.isHamiltoniano();
+                JOptionPane.showMessageDialog(null, (res ? new GraphPanel(Hamiltonicidad.getVisitados(), this) : "El Grafo no es Hamiltoniano"));
             }
-            //    JOptionPane.showMessageDialog(null, "Tiempo de Ejecucion " + ((timeFin - timeIni) / 1000.0000f) + " Segundos");
-            // JOptionPane.showMessageDialog(this, (res ? "El grafo es conexo" : "El grafo no es conexo"));
-        } else if ("Tipo".equals((cmd))) {
+            //JOptionPane.showMessageDialog(null, "Tiempo de Ejecucion " + ((timeFin - timeIni) / 1000.0000f) + " Segundos");
+
+            }else if ("Tipo".equals((cmd))) {
             kind = (Kind) kindBox.getSelectedItem();
             Node.updateKind(nodes, kind);
         } else if ("Nuevo".equals(cmd)) {
@@ -162,24 +158,12 @@ public class GraphPanel extends JPanel
             n.setSelected(true);
             nodes.add(n);
         } else if ("ListaConexiones".equals(cmd)) {
-            /* for (Iterator<Edge> it = edges.iterator(); it.hasNext();) {
-            Edge edge = it.next();
-            System.out.print("(" + edge.getArista()[0] + "," + edge.getArista()[1] + "), ");
-            }
-            System.out.println("");*/
             String nroVertices = JOptionPane.showInputDialog("Cantidad de vertices del grafo");
-            boolean[][] mAdy = (nroVertices != null /*   System.out.println("");
-                    for (boolean[] bs : mAdy) {
-                    for (boolean b : bs) {
-                    System.out.print(b ? 1 : 0);
-                    }
-                    System.out.println("");
-                    }*/)
+            boolean[][] mAdy = (nroVertices != null)
                     ? generarMatrizAdyAleatoria(Integer.parseInt(nroVertices)) : getGrafoMatrizAdy();
             if (mAdy == null) {
                 return;
             }
-
             guardarGrafo(mAdy);
 
         } else {
@@ -643,9 +627,9 @@ public class GraphPanel extends JPanel
                     } else {
                         grafo[i][j] = false;
                     }
-                    
+
                 }
-               
+
             }
         }
         for (boolean[] bs : grafo) {
@@ -654,7 +638,7 @@ public class GraphPanel extends JPanel
             }
             System.out.println("");
         }
-        
+
         return grafo;
 
     }
