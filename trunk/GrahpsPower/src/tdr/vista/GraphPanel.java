@@ -132,21 +132,23 @@ public class GraphPanel extends JPanel
                 JOptionPane.showMessageDialog(this, "No es hamiltoniano \n Tiene vertice de corte"+Hamiltonicidad.getVerticeCorte());
             }else{
                 if(Hamiltonicidad.comprobarGradoDeVertices()){
-                
+                    JOptionPane.showMessageDialog(this,"Es Hamiltoniano \n Cumple que deg(v) >= n / 2" );
                 }else{
                     if(Hamiltonicidad.comprobarGradoVerticesNoConectados()){
-                    
+                        JOptionPane.showMessageDialog(this,"Es Hamiltoniano \n Cumple que deg(u) + deg(v) >= n" );
                     }
                     else{
                         if(Hamiltonicidad.comprobarNroAristas()){
-                        
+                            JOptionPane.showMessageDialog(this,"Es Hamiltoniano \n Cumple que que tiene al menos 1/2*(n-1)*(n-2) aristas");
+                        }else{
+                            System.out.println("Evalua el algoritmo exaustivo");
+                            boolean res = tdr.algoritmos.Hamiltonicidad.isHamiltoniano();
+                            JOptionPane.showMessageDialog(null, (res ? new GraphPanel(Hamiltonicidad.getVisitados(), this) : "El Grafo no es Hamiltoniano"));
                         }
                     }
                 }
             //long timeFin = System.currentTimeMillis();
-                System.out.println("Evalua el algoritmo exaustivo");
-                boolean res = tdr.algoritmos.Hamiltonicidad.isHamiltoniano();
-                JOptionPane.showMessageDialog(null, (res ? new GraphPanel(Hamiltonicidad.getVisitados(), this) : "El Grafo no es Hamiltoniano"));
+                
             }
             //    JOptionPane.showMessageDialog(null, "Tiempo de Ejecucion " + ((timeFin - timeIni) / 1000.0000f) + " Segundos");
             // JOptionPane.showMessageDialog(this, (res ? "El grafo es conexo" : "El grafo no es conexo"));
