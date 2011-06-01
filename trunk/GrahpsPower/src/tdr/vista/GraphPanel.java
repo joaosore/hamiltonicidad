@@ -129,7 +129,7 @@ public class GraphPanel extends JPanel
             System.out.println("vertices no conectados"+Hamiltonicidad.comprobarGradoVerticesNoConectados());
             System.out.println("comprobar nro aristas"+Hamiltonicidad.comprobarNroAristas());
             if( Hamiltonicidad.tieneVertCorte() ){
-                JOptionPane.showMessageDialog(this, "No es hamiltoniano \n Tiene vertice de corte"+Hamiltonicidad.getVerticeCorte());
+                JOptionPane.showMessageDialog(this, "No es hamiltoniano \n Tiene vertice de corte "+(Hamiltonicidad.getVerticeCorte()+1));
             }else{
                 if(Hamiltonicidad.comprobarGradoDeVertices()){
                     JOptionPane.showMessageDialog(this,"Es Hamiltoniano \n Cumple que deg(v) >= n / 2" );
