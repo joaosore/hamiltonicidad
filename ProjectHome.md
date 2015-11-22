@@ -1,0 +1,1 @@
+En este proyecto determinaremos si un grafo de entrada G=(V,E) es hamiltoniano o no.
